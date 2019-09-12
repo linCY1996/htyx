@@ -1,0 +1,70 @@
+
+.nav {
+	position: fixed;
+	left: 0;
+	color: white;
+	width: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-align: start;
+	-webkit-align-items: flex-start;
+	    -ms-flex-align: start;
+	        align-items: flex-start;
+	-webkit-box-pack: start;
+	-webkit-justify-content: flex-start;
+	    -ms-flex-pack: start;
+	        justify-content: flex-start;
+	font-size: 24rpx;
+	background-repeat: no-repeat;
+	background-size: cover;
+	z-index: 998;
+}
+.title-sty {
+	font-size: 18px;
+	font-weight: 600;
+	color: black;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+.baseSty {
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	font-family: 'Alibaba PuHuiTi'
+}
+.baseSty::-webkit-scrollbar {
+	display: none;
+}
+.paddingTop01 {
+	padding-top: 30px;
+}
+.paddingTop02 {
+	padding-top: 50px;
+}
+.ctrlSty {
+	margin-top: 30px;
+}
+.navTabItem {
+	width: 80px;
+	height: 44px;
+	display: inline-block;
+	text-align: center;
+	line-height: 48px;
+	color: #c9c9c9;
+	font-size: 20px;
+	margin-bottom: 18px;
+}
+.navSelect {
+	border-bottom: 3px solid #f0e53c;
+	color: black;
+}
+

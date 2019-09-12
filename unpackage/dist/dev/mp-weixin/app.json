@@ -1,0 +1,30 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/userMsg/boss",
+    "pages/userMsg/staff",
+    "pages/competed/index",
+    "pages/index01/index",
+    "pages/index/index",
+    "components/bosspages/order",
+    "pages/identity/index",
+    "pages/status/index",
+    "pages/search/index",
+    "pages/upHead/index",
+    "pages/bossOrderMsg/index",
+    "pages/staffOrderMsg/index",
+    "pages/uploadCareer/uploadCareer",
+    "pages/myAttention/myAttention"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "navigationStyle": "custom"
+  },
+  "usingComponents": {
+    "fr-loading": "/components/loading/loading",
+    "my-header": "/components/header"
+  },
+  "sitemapLocation": "sitemap45.json"
+}

@@ -1,0 +1,81 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '甲方资料修改' 
+ * @Date: 2018-12-11 10:23:02 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-11 10:23:02 
+ -->
+
+<template>
+  <view class="InfoUpdate">
+    <view class="techApprove-box">
+      <input_name fieldName='contactName' title="对接人名字" :input.sync="input" maxlength="18" />
+      <input_phone fieldName='contactPhone' title="对接人电话" type='number' :input.sync="input" maxlength="11" />
+    </view>
+  </view>
+  <actionBar textSec="提交" noOnly="1" @tap.user="confirm"></actionBar>
+</template>
+
+<script>
+  import wepy from "wepy";
+  import weuiInput from "@/components/weui/input";
+  import actionBar from "@/components/common/action_bar";
+  import { saveCompanyInfo } from "@/api/api_wechat.js";
+  export default class InfoUpdate extends wepy.page {
+    config = {
+      navigationBarTitleText: "对接人修改"
+    };
+    components = {
+      actionBar: actionBar,
+      input_name: weuiInput,
+      input_phone: weuiInput,
+    };
+    data = {
+      input: {
+        id: '',
+        contactName: '',
+        contactPhone: ''
+      }
+    };
+    methods = {
+      confirm() {
+        if (this.input.contactName && this.input.contactPhone) {
+          this.saveInfo()
+        } else {
+          Tips.alert("请填写完整资料信息!");
+        }
+      }
+    };
+    saveInfo() {
+      saveCompanyInfo(this.input).then(res => {
+        wx.navigateBack()
+      })
+    };
+    onLoad(val) {
+      if (val.companyId != '') {
+        this.input.id = val.companyId
+        this.$apply()
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .InfoUpdate {
+    background: #fff;
+    margin-top: 30rpx;
+  }
+
+
+  .techApprove-box {
+    background: #fff;
+    margin-top: 30rpx;
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+</style>

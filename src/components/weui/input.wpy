@@ -1,0 +1,80 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '表单' 
+ * @Date: 2018-06-26 17:33:08 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-06-26 17:33:08 
+ -->
+<template>
+  <view class="weui-cell weui-cell_input">
+    <view class="weui-cell__hd">
+      <view class="weui-label">{{title}}</view>
+    </view>
+    <view class="line" style="width:1px;margin-right:30rpx;color: #a7afbf;">|</view>
+    <view class="weui-cell__bd">
+      <input class="weui-input" maxlength='{{maxlength}}' id="{{fieldName}}" @input="input" value="{{input[fieldName]}}" disabled="{{fieldName=='fromLimit1' || fieldName=='fromLimit2'}}" type="{{type}}" placeholder="{{placeholder}}" placeholder-class="phClass" />
+    </view>
+    <view class="weui-cell__ft">
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class InputText extends wepy.component {
+    props = {
+      input: {
+        twoWay: true
+      },
+      title: {},
+      type: {
+        default: 'text'
+      },
+      unit: {
+        default: ''
+      },
+      fieldName: {
+        type: String,
+        default: ''
+      },
+      placeholder: {},
+      level: {
+        default: 1
+      },
+      maxlength: {
+        default: ''
+      }
+    };
+
+    onLoad() {
+      if (this.placeholder == null && this.title != null) {
+        this.placeholder = `请输入${this.title}`;
+        this.$apply();
+      }
+      if (this.fieldName == '') {
+        const name = this.$name;
+        const index = name.indexOf('_');
+        if (index != -1) {
+          this.fieldName = name.substring(index + 1, name.length);
+          this.$apply();
+        }
+      }
+    }
+
+    methods = {
+      input(e) {
+        // console.log(e)
+        const value = e.detail.value;
+        const id = e.target.id;
+        this.input[this.fieldName] = value;
+        this.$emit('input', value, id, this.level);
+      }
+    };
+    events = {};
+  }
+</script>
+
+<style lang="scss">
+  @import '../../styles/variable';
+</style>

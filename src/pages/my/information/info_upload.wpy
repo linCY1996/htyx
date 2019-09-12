@@ -1,0 +1,112 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '甲方资料上传' 
+ * @Date: 2018-12-11 10:23:02 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-11 10:23:02 
+ -->
+
+<template>
+  <view class="InfoUpload">
+    <view class="topTips">
+      《中华人民共和国网络安全法》正式实施，应国家法律要求，使用互联网服务需进行账号实名。为保障海豚美芽为你提供优质服务，请填写真实有效相关信息。
+    </view>
+    <view class="techApprove-box">
+      <input_company fieldName='companyName' title="公司名称" :input.sync="input" maxlength="18" />
+      <input_name fieldName='contactName' title="对接人名字" :input.sync="input" maxlength="18" />
+      <input_phone fieldName='contactPhone' type='number' title="对接人电话" :input.sync="input" maxlength="11" />
+      <attachment title="营业执照">
+        <imageBar @getFileIds.user="getFileIds"></imageBar>
+      </attachment>
+    </view>
+    <view class="help">只能上传jpg/png/gif文件，最多1个文件且不超过5MB</view>
+  </view>
+  <actionBar :textSec.sync="textSec" noOnly="1" @tap.user="confirm"></actionBar>
+</template>
+
+<script>
+  import wepy from "wepy";
+  import weuiInput from "@/components/weui/input";
+  import actionBar from "@/components/common/action_bar";
+  import imageBar from '@/components/imageBar/index'
+  import weuiSelect from "@/components/weui/inputSelect";
+  import Tips from '@/utils/Tips';
+  import { isEmptyObject } from '@/utils/index';
+  import { saveCompanyInfo, saveUserInfo } from "@/api/api_wechat.js";
+  import qiniuUploader from "@/utils/qiniuUploader.js"
+  export default class InfoUpload extends wepy.page {
+    config = {
+      navigationBarTitleText: "资料上传"
+    };
+    components = {
+      attachment: weuiSelect,
+      imageBar: imageBar,
+      actionBar: actionBar,
+      input_company: weuiInput,
+      input_name: weuiInput,
+      input_phone: weuiInput,
+    };
+    data = {
+      input: {
+        businessLicense: ''
+      }
+    };
+    methods = {
+      confirm() {
+        if (!isEmptyObject(this.input) && this.input.companyName && this.input.contactName && this.input.contactPhone && this.input.businessLicense) {
+          this.CompanyInfo().then(res => {
+            saveUserInfo({ userType: 1 })
+          })
+        } else { Tips.alert("请填写完整资料信息!"); }
+      },
+      // 获取图片资源
+      getFileIds(res) {
+        this.input.businessLicense = res[0]
+        this.$apply()
+      }
+    };
+    // 上传资料
+    async CompanyInfo() {
+      saveCompanyInfo(this.input).then(res => {
+        wx.switchTab({
+          url: "/pages/home/index"
+        });
+      })
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .help {
+    color: #a7afbf;
+    padding: 30rpx;
+    font-size: 22rpx;
+  }
+
+  .topTips {
+    background: #fff5cd;
+    padding: 10px 30rpx;
+    color: #ff844e;
+    font-weight: lighter;
+  }
+
+  .techApprove-box {
+    background: #fff;
+    margin-top: 30rpx;
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+
+  .phClass {
+    color: #a7afbf;
+  }
+
+  .weui-label {
+    width: 160rpx;
+  }
+</style>

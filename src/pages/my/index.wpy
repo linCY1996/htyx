@@ -1,0 +1,102 @@
+<template>
+  <view class="container">
+    <AvatarPanel :info.sync="userInfo" />
+    <view class="weui-cells-form">
+      <Information @tap.user="toInformation" title="基本资料" />
+      <Order @tap.user="toOrder" title="我的订单" />
+      <Customer @tap.user="toCustomer" title="联系客服" />
+    </view>
+  </view>
+  <view class="tab-border" />
+</template>
+<script>
+  import wepy from "wepy";
+  import Navigator from '@/components/weui/navigator';
+  import AvatarPanel from '@/components/common/avatar_panel';
+  import Tips from '@/utils/Tips';
+  import { getUserInfo } from "@/api/api_wechat.js";
+
+  export default class MyIndex extends wepy.page {
+    config = {};
+    mixins = [];
+    components = {
+      Information: Navigator,
+      Order: Navigator,
+      Customer: Navigator,
+      AvatarPanel: AvatarPanel
+    };
+
+    data = {
+      userInfo: null,
+    };
+    methods = {
+      // 我的资料
+      toInformation() {
+        wx.navigateTo({
+          url: "/pages/my/information/index"
+        });
+      },
+      // 我的订单
+      toOrder() {
+        wx.navigateTo({
+          url: "/pages/my/order/index"
+        });
+      },
+      //客服
+      toCustomer() {
+        wx.showModal({
+          title: '客服电话',
+          content: '18808059879 , 13677627967',
+          showCancel: false,
+        })
+      },
+    };
+    events = {};
+    onShow() {
+      getUserInfo({
+        uid: wx.getStorageSync('uid')
+      }).then(res => {
+        this.userInfo = {
+          avatarUrl: res.info.avatar,
+          nickName: res.info.nickName
+        }
+        this.$apply()
+      })
+    }
+    onLoad() {};
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+
+  page {
+    background: #fff;
+  }
+
+  .weui-cells-form {
+    margin-top: 60rpx;
+  }
+
+  .tipIcon {
+    width: 140rpx;
+    height: 140rpx;
+    position: absolute;
+    top: -68rpx;
+    left: 50%;
+    margin-left: -60rpx;
+    z-index: 999999;
+  }
+
+  .close {
+    position: absolute;
+    top: 10rpx;
+    right: 14rpx;
+    z-index: 999;
+    padding: 0 10rpx;
+
+    span {
+      font-size: 26rpx;
+      font-weight: bold;
+    }
+  }
+</style>

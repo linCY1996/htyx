@@ -1,0 +1,137 @@
+
+.section{
+	width: 94%;
+	height: 60rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	margin: 0 auto;
+	margin-top: 16rpx;
+	background: #DDDDDD;
+	border-radius: 10rpx;
+	color: #aaa8a9;
+	line-height: 60rpx;
+	font-size: 32rpx;
+}
+.div80{
+	width: 90%;
+	height: 70%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-justify-content: space-around;
+	    -ms-flex-pack: distribute;
+	        justify-content: space-around;
+	-webkit-box-align: start;
+	-webkit-align-items: flex-start;
+	    -ms-flex-align: start;
+	        align-items: flex-start;
+	margin: 0 auto;
+	margin-top: 2%;
+}
+.btn{
+	width: 90%;
+	height: 25%;
+	margin: 0 auto
+}
+.btn button{
+	width: 150rpx;
+	height: 50rpx;
+	font-size: 24rpx;
+	float: right;
+	line-height: 50rpx;
+	padding: 0;
+	border-radius: 60rpx;
+	background: #35a7ff;
+	color: white;
+}
+button::after {
+	border: none;
+}
+.form{
+	letter-spacing: 4rpx;
+}
+.section__title{
+	width: 26%;
+}
+.section text{
+	width: 4%;
+	color: #DD524D;
+	text-align: right;
+}
+.uploadPics{
+	width: 100%;
+	height: 250rpx;
+	margin-top: 32rpx;
+	border: 1px solid #DDDDDD;
+}
+.section input{
+	width: 70%!important;
+	height: 100%;
+}
+.uploadIcon{
+	width: 150rpx;
+	height: 150rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	background: #DDDDDD;
+	-webkit-flex-wrap: wrap;
+	    -ms-flex-wrap: wrap;
+	        flex-wrap: wrap;
+}
+.uploadIcon view{
+	font-size: 24rpx;
+	color:#aaa8a9;
+	margin-top: -30%;
+}
+.uploadIcon image{
+	width: 100%;
+	height: 100%;
+}
+#camera{
+	width: 85rpx;
+	height: 85rpx;
+}
+.title-sty{
+	font-size: 18px;
+	font-weight: 600;
+	color: black;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	height: 88rpx;
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	background-color: #ffffff;
+}
+.title-sty view{
+	line-height: 88rpx;
+}
+.whiteBlock1{
+	height: 132rpx;
+	position: fixed;
+	background-color: #FFFFFF;
+	width: 100%;
+	z-index: 999;
+}
+.whiteBlock2{
+	height: 88rpx;
+	background: #FFFFFF;
+	width: 100%;
+	padding-top: 132rpx;
+}
+
+

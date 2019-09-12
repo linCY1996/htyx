@@ -1,0 +1,138 @@
+<template>
+  <view class="container">
+    <view @tap='goInfo'>
+      <AvatarPanel :info.sync="userInfo" />
+    </view>
+    <tabModel-scroll @bindChange.user="change" />
+    <scroll-view class="y-scroll-view" scroll-y @scrolltolower="searchScrollLower">
+      <repeat for="{{evListData}}" key="index" index="index" item="item">
+        <view class="order_index">
+          <view class="index-tiltle">
+            <view class="title">{{item.activeName}}</view>
+            <view>{{item.startTime}}——{{item.endTime}}</view>
+          </view>
+          <view class="index-num">{{item.price}}元/天</view>
+        </view>
+      </repeat>
+    </scroll-view>
+  </view>
+</template>
+<script>
+  import wepy from "wepy";
+  import AvatarPanel from '@/components/common/avatar_panel';
+  import Tab from 'kai-ui/Tab'
+  import { getUserInfo, useractivity } from "@/api/api_wechat.js";
+  import { parseTime } from "@/utils/index.js";
+  export default class ModelMyIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: "我的",
+      disableScroll: true
+    };
+    mixins = [];
+    components = {
+      AvatarPanel: AvatarPanel,
+      'tabModel-scroll': Tab
+    };
+
+    data = {
+      userInfo: null,
+      tab4: {
+        list: [{ id: 1, title: '待开始' }, { id: 2, title: '进行中' }, { id: 3, title: '已完成' }],
+        scroll: false,
+        selectedId: 1,
+        class: 'tabModel-success'
+      },
+      evListData: [],
+      page: 1,
+      maxPage: 1
+    };
+    onLoad() {
+      const { tab4 } = this
+      this.$invoke('tabModel-scroll', 'doInitTabData', tab4)
+    };
+    methods = {
+      change(res) {
+        if (res != this.tab4.selectedId) {
+          this.page = 1
+          this.maxPage = 1
+          this.tab4.selectedId = res
+          this.getData()
+          this.$apply()
+        }
+      },
+      goInfo() {
+        this.$navigate("/pages/my/information/model_index")
+      }
+    };
+    events = {};
+    onShow() {
+      getUserInfo({
+        uid: wx.getStorageSync('uid')
+      }).then(res => {
+        this.userInfo = {
+          avatarUrl: res.info.avatar,
+          nickName: res.info.nickName
+        }
+        this.getData()
+        this.$apply()
+      })
+    };
+    getData() {
+      useractivity({
+        type: this.tab4.selectedId,
+        page: this.page
+      }).then(res => {
+        if (this.page <= this.maxPage) {
+          this.page++;
+          this.maxPage = res.info.totalPage
+          this.evListData = res.info.list
+          this.dateFormat()
+          this.$apply()
+        }
+      })
+    }
+    searchScrollLower() {
+      if (this.page < this.maxPage) {
+        this.getData()
+      }
+    }
+    dateFormat() {
+      this.evListData.forEach(item => {
+        item.startTime = parseTime(item.startTime, "{m}.{d}")
+        item.endTime = parseTime(item.endTime, "{m}.{d}")
+      })
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .y-scroll-view {
+    padding-top: 10rpx;
+    height: calc(100vh - (47px + 410rpx));
+  }
+
+  .left {
+    float: left;
+  }
+
+  .tabModel-success .animate-border {
+    background-color: $color-primary !important;
+  }
+
+  .order_index {
+    background-color: #fff;
+    padding: 10rpx 20rpx;
+    margin-bottom: 10rpx;
+
+    .index-tiltle {
+      display: flex;
+      justify-content: space-between;
+      padding: 10rpx 0;
+
+      .title {
+        font-size: 35rpx;
+      }
+    }
+  }
+</style>

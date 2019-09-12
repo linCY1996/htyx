@@ -1,0 +1,97 @@
+<template>
+  <view class="ModelBasicInfo">
+    <name title="姓名">{{userInfo.nickName}}</name>
+    <gender title="性别">{{userInfo.gender==1?"男":"女"}}</gender>
+    <phone title="手机号">
+      <view class="weui-cell weui-cell_select" @tap="goPhone">
+        <view class="weui-cell__bd"> {{userInfo.mobileno}}</view>
+        <view class="weui-cell__ft  weui-cell__ft_in-access">
+        </view>
+      </view>
+    </phone>
+    <career title="职业">
+      <view class="weui-cell weui-cell_select" @tap="goJob">
+        <view class="weui-cell__bd"> {{userInfo.job==1?"模特":"礼仪"}}</view>
+        <view class="weui-cell__ft  weui-cell__ft_in-access">
+        </view>
+      </view>
+    </career>
+    <address title="地址">{{userInfo.address}}</address>
+    <view class="img_box">
+      <repeat for="{{userInfo.pic}}" key="index" index="index" item="item">
+        <image class="info_img" src="{{item}}"></image>
+      </repeat>
+      <video class="info_img" src="{{userInfo.video}}" wx:if='{{userInfo.video}}'></video>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from "wepy";
+  import weuiSelect from "@/components/weui/inputSelect";
+  import { getUserInfo } from "@/api/api_wechat.js";
+  export default class ModelBasicInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: "基本资料",
+    };
+    components = {
+      name: weuiSelect,
+      gender: weuiSelect,
+      phone: weuiSelect,
+      attachment: weuiSelect,
+      career: weuiSelect,
+      address: weuiSelect
+    };
+    data = {
+      userInfo: null
+    };
+    methods = {
+      goPhone() {
+        this.$navigate("/pages/my/information/phone_update")
+      },
+      goJob() {
+        this.$navigate("/pages/my/information/model_info_update")
+      }
+    };
+    events = {};
+    onShow() {
+      getUserInfo({
+        uid: wx.getStorageSync('uid')
+      }).then(res => {
+        this.userInfo = res.info
+        this.$apply()
+      })
+    };
+    onLoad() {};
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .ModelBasicInfo {
+    box-sizing: border-box;
+    background: #fff;
+    /* margin-top: 30rpx; */
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+
+  .img_box {
+    padding: 10rpx;
+    /* display: flex;
+    justify-content: space-between; */
+  }
+
+  .info_img {
+    width: 100%;
+    /* flex: 1; */
+    height: 300rpx;
+  }
+
+  .info_img:not(:first-child) {
+    /* margin-left: 10rpx; */
+  }
+</style>

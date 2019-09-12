@@ -1,0 +1,15 @@
+{
+  "description": "海豚美芽微信小程序V1.0版本",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false,
+    "newFeature": true
+  },
+  "compileType": "miniprogram",
+  "appid": "wx9ad28f0d3d82d6e3",
+  "projectname": "海豚美芽",
+  "miniprogramRoot": "./dist",
+  "condition": {}
+}

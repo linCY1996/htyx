@@ -1,0 +1,1 @@
+<view style="height:84px;"><image class="my-header" style="width:80px;height:20px;" src="{{logo}}" mode="aspectFit"></image></view>

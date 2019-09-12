@@ -1,0 +1,17 @@
+
+.paddingTop01{
+	padding-top: 30px;
+}
+.paddingTop02{
+	padding-top: 50px;
+}
+.title-sty{
+	font-size: 18px;
+	font-weight: 600;
+	color: white;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+

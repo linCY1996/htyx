@@ -1,0 +1,11 @@
+
+.my-header{
+	margin-top: 34px;
+	margin-left: 10px;
+}
+@media screen and (min-width:768px){
+.my-header{
+		margin-top: 24px;
+}
+}
+

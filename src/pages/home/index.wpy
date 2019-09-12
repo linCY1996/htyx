@@ -1,0 +1,251 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '首页' 
+ * @Date: 2018-12-10 15:08:50 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-10 15:08:50 
+ -->
+<template>
+  <view class="container">
+    <tab-scroll @bindChange.user="change" />
+    <k-searchbar className="mytest" @bindsearch.user="searchEvent" />
+    <scroll-view class="y-scroll-view" scroll-y @scrolltolower="searchScrollLower">
+      <repeat for="{{evListData}}" key="index" index="index" item="item">
+        <view class="model_index" @tap='goDetail({{item}})'>
+          <image class="index_img" mode='widthFix' src="{{item.pic[0]}}"></image>
+          <view class="index_info">
+            <view class="info_name">
+              <view class="name">{{item.nickName}}</view>
+              <view class="career">{{item.job==1?"模特":"礼仪"}}</view>
+            </view>
+            <view class='info_number'>
+              <view>已参与{{item.activityCount}}场活动</view>
+              <view class="star">
+                <block wx:for="{{stars}}" wx:key="index" wx:for-item="subItem">
+                  <image class="star-image" style="left: {{subItem*10}}rpx" src="{{item.creadit > subItem ?selectedSrc : normalSrc}}"></image>
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </scroll-view>
+    <!-- 购物车数字显示 -->
+    <view class="float-btn" @tap='goOrder'>
+      <image class="gwl" src='../../images/home/gwl.png'></image>
+      <view class="wz" wx:if="{{modelList>0}}">{{modelList}}</view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from "wepy";
+  import Tab from 'kai-ui/Tab'
+  import SearchBar from 'kai-ui/SearchBar'
+  import { isEmptyObject } from '@/utils/index';
+  import { modellist } from "@/api/api_wechat.js";
+  import Tips from '@/utils/Tips';
+  export default class HomeIndex extends wepy.page {
+    config = {
+      disableScroll: true
+    };
+    components = {
+      'tab-scroll': Tab,
+      'k-searchbar': SearchBar,
+    }
+    data = {
+      stars: [0, 1, 2, 3, 4],
+      normalSrc: '../../images/home/noStar.png',
+      selectedSrc: '../../images/home/fullStar.png',
+      tab2: {
+        list: [{ id: 1, title: '模特' }, { id: 0, title: '礼仪' }],
+        scroll: false,
+        selectedId: 1,
+        class: 'tab-success'
+      },
+      modelList: 0,
+      evListData: [],
+      keyword: '',
+      page: 1,
+      maxPage: 1
+    };
+    onLoad() {
+      const { tab2 } = this
+      this.$invoke('tab-scroll', 'doInitTabData', tab2)
+      this.getData()
+    }
+    onShow() {
+      var than = this
+      than.modelList = 0
+      wx.getStorage({
+        key: 'orderModelList',
+        success: (res) => {
+          than.modelList = JSON.parse(res.data).length
+          than.$apply()
+        }
+      })
+    }
+    methods = {
+      change(res) {
+        if (res != this.tab2.selectedId) {
+          this.tab2.selectedId = res
+          this.page = 1
+          this.maxPage = 1
+          this.getData()
+          this.$apply()
+        }
+      },
+      searchEvent(value) {
+        if (value != "输入文字进行搜索") {
+          this.keyword = value
+          this.$apply()
+        } else {
+          this.keyword = ''
+          this.$apply()
+        }
+        this.page = 1
+        this.maxPage = 1
+        this.getData()
+        this.$apply()
+      },
+      goDetail(val) {
+        this.$navigate("/pages/home/modelDetail/index")
+        wx.setStorageSync('modelDetail', JSON.stringify(val))
+      },
+      goOrder() {
+        if (this.modelList != 0) {
+          this.$navigate("/pages/home/SubmitOrders/index")
+        } else {
+          Tips.alert("请先加入需求兼职!");
+        }
+      }
+    };
+    getData() {
+      modellist({
+        page: this.page,
+        key: this.keyword,
+        type: this.tab2.selectedId
+      }).then(res => {
+        if (this.page <= this.maxPage) {
+          this.page++;
+          this.maxPage = res.info.totalPage
+          this.evListData = res.info.list
+          this.$apply()
+        }
+      })
+    }
+    searchScrollLower() {
+      if (this.page < this.maxPage) {
+        this.getData()
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .y-scroll-view {
+    height: calc(100vh - (47px + 40rpx + 10px + 1.4rem));
+  }
+
+  .left {
+    float: left;
+  }
+
+  .tab-success .animate-border {
+    background-color: $color-primary !important;
+  }
+
+  .mytest {
+    .searchbar {
+      padding: 10rpx;
+
+      .searchbar-form {
+        padding: 0;
+      }
+
+      .searchbar-form__cancel {
+        display: none;
+      }
+    }
+  }
+
+  .model_index {
+    padding: 10rpx 10rpx 0 10rpx;
+    position: relative;
+
+    .index_img {
+      width: 100%;
+      /* height: 450rpx; */
+    }
+
+    .index_info {
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 10rpx;
+      width: calc(100% - 20rpx);
+      padding: 10rpx 20rpx;
+      height: 150rpx;
+
+      background: rgba(255, 255, 255, .5);
+
+      .info_name {
+        display: flex;
+        align-items: baseline;
+
+        .name {
+          font-size: 50rpx;
+          margin-right: 20rpx;
+        }
+
+        .career {
+          margin-top: -20rpx;
+        }
+      }
+
+      .info_number {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .star {
+    .star-image {
+      width: 36rpx;
+      height: 36rpx;
+      margin-right: 10rpx;
+    }
+  }
+
+  .float-btn {
+    position: fixed;
+    bottom: 15px;
+    right: 10px;
+    width: 120rpx;
+    height: 120rpx;
+    text-align: center;
+    line-height: 145rpx;
+    color: #fbfbfb;
+    font-size: 35rpx;
+    background-color: rgba(68, 138, 255, .9);
+    border-radius: 50%;
+
+    .gwl {
+      width: 50rpx;
+      height: 50rpx;
+    }
+
+    .wz {
+      width: 40rpx;
+      height: 40rpx;
+      line-height: 40rpx;
+      font-size: 25rpx;
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      background-color: #FF8C00;
+      border-radius: 50%;
+      color: #fff;
+    }
+  }
+</style>

@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "staff-index": "/components/staffpages/index"
+  }
+}

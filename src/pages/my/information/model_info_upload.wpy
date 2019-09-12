@@ -1,0 +1,197 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '兼职资料上传' 
+ * @Date: 2018-12-11 10:23:02 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-11 10:23:02 
+ -->
+
+<template>
+  <view class="ModelInfoUpload">
+    <view class="topTips">
+      《中华人民共和国网络安全法》正式实施，应国家法律要求，使用互联网服务需进行账号实名。为保障海豚美芽为你提供优质服务，请填写真实有效相关信息。
+    </view>
+    <view class="techApprove-box">
+      <input_phone fieldName='nickname' title="姓名" :input.sync="input" maxlength="18" />
+      <input_name fieldName='mobileno' title="电话" :input.sync="input" maxlength="11" type='number' />
+      <gender title="性别">
+        <gendeSelect @input.user='genderClick' :range="genderList"></gendeSelect>
+      </gender>
+      <career title="职业">
+        <careerSelect @input.user='careerClick' :range="careerList"></careerSelect>
+      </career>
+      <address title="地址">
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__bd">
+            <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+              <view class="weui-select weui-select_in-select-after hien-text" style="border:none;" wx:if="{{region.length>1}}">
+                {{region[0]}}，{{region[1]}}，{{region[2]}}
+              </view>
+              <view class="weui-select weui-select_in-select-after default" style="border:none;" wx:else>
+                请选择
+              </view>
+            </picker>
+          </view>
+        </view>
+      </address>
+      <attachment title="照片">
+        <view>
+          <imageBar @getFileIds.user="getImgFileIds" count="2"></imageBar>
+        </view>
+      </attachment>
+      <videoModel title="视频">
+        <view>
+          <videoBar @getFileIds.user="getVideoFileIds" count="1"></videoBar>
+        </view>
+      </videoModel>
+    </view>
+    <view class="help">图片只能上传jpg/png/gif文件，最多2个文件且不超过5MB。视频只能上传mp4/m3u8文件，最多1个文件且视频最长10s内。</view>
+  </view>
+  <actionBar :textSec.sync="textSec" noOnly="1" @tap.user="confirm"></actionBar>
+</template>
+
+<script>
+  import wepy from "wepy";
+  import weuiInput from "@/components/weui/input";
+  import actionBar from "@/components/common/action_bar";
+  import imageBar from '@/components/imageBar/index';
+  import videoBar from '@/components/videoBar/index';
+  import weuiSelect from "@/components/weui/inputSelect";
+  import picker from "@/components/weui/picker"
+  import Tips from '@/utils/Tips';
+  import { isEmptyObject } from '@/utils/index';
+  import { saveUserInfo } from "@/api/api_wechat.js";
+  export default class ModelInfoUpload extends wepy.page {
+    config = {
+      navigationBarTitleText: "资料上传"
+    };
+    components = {
+      imageBar: imageBar,
+      videoBar: videoBar,
+      actionBar: actionBar,
+      input_name: weuiInput,
+      input_phone: weuiInput,
+      attachment: weuiSelect,
+      gender: weuiSelect,
+      career: weuiSelect,
+      address: weuiSelect,
+      videoModel: weuiSelect,
+      gendeSelect: picker,
+      careerSelect: picker,
+    };
+    data = {
+      input: {},
+      genderList: [{ id: '1', name: "男" }, { id: '0', name: "女" }],
+      careerList: [{ id: '1', name: "模特" }, { id: '0', name: "礼仪" }],
+      // 性别
+      gender: '',
+      // 职业
+      job: '',
+      // 地址
+      region: [],
+      // 图片
+      pic: [],
+      videoUrl: "",
+      userInfo: {}
+    };
+    onShow() {
+      this.userInfo = wepy.$store.getState().userInfo.userInfo;
+    }
+    methods = {
+      // 性别选择
+      genderClick(val) {
+        this.gender = val.id
+        this.$apply()
+      },
+      // 职业选择
+      careerClick(val) {
+        this.job = val.id
+        this.$apply()
+      },
+      // 地址选择
+      bindRegionChange(e) {
+        this.region = e.detail.value
+        this.$apply()
+      },
+      // 图片
+      getImgFileIds(val) {
+        this.pic = val
+        this.$apply()
+      },
+      // 视频
+      getVideoFileIds(val) {
+        this.videoUrl = val[0]
+        this.$apply()
+      },
+      // 确认上传
+      confirm() {
+        if (!isEmptyObject(this.input) && this.input.nickname && this.input.mobileno && this.gender && this.job && this.region.length > 0 && this.pic.length > 0 && this.videoUrl) {
+          this.saveUser()
+        } else { Tips.alert("请填写完整资料信息!"); }
+      }
+    };
+    saveUser() {
+      saveUserInfo({
+        avatar: this.userInfo.avatarUrl,
+        nickname: this.input.nickname,
+        mobileno: this.input.mobileno,
+        gender: this.gender,
+        job: this.job,
+        address: this.region.toString(),
+        pic: this.pic.toString(),
+        video: this.videoUrl,
+        userType: 0,
+      }).then(res => {
+        wx.reLaunch({
+          url: "/pages/home/model_index"
+        });
+      })
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .ModelInfoUpload {
+    padding-bottom: 100rpx;
+  }
+
+  .help {
+    color: #a7afbf;
+    padding: 30rpx;
+    font-size: 22rpx;
+  }
+
+  .topTips {
+    background: #fff5cd;
+    padding: 10px 30rpx;
+    color: #ff844e;
+    font-weight: lighter;
+  }
+
+  .techApprove-box {
+    background: #fff;
+    margin-top: 30rpx;
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+
+  .phClass {
+    color: #a7afbf;
+  }
+
+  .weui-label {
+    width: 160rpx;
+  }
+
+  .hien-text {
+    width: 438rpx;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

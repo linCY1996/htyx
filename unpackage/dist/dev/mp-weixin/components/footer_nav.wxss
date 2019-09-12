@@ -1,0 +1,25 @@
+
+.footer{
+
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #ffffff;
+	color: #fff;
+	border-top: 1px solid rgb(222,222,222);
+}
+.footer_item{
+	float: left;
+	width: 33.3%;
+	text-align: center;
+	font-size: 28rpx;
+	height: 120rpx;
+}
+.footer_item image{
+	width: 32px;
+	height: 32px;
+	margin: 10px auto;
+}
+
+

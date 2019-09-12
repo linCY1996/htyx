@@ -1,0 +1,269 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '选择身份' 
+ * @Date: 2018-12-10 16:31:41 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-10 16:31:41 
+ -->
+<template>
+  <view class="identity">
+    <view class="party_a">
+      <view class="avatar">
+        <image class="av_img" src="../../images/home/jf.png"></image>
+      </view>
+      <view class="select">
+        <view @tap="partyClick(1)">
+          <view class="circle" wx:if="{{party_index==0}}">
+            <image src="../../images/home/circle_default.png" style="width: 40rpx;height:40rpx;"></image>
+          </view>
+          <view class="circle" wx:else>
+            <image src="../../images/home/circle.png" style="width: 40rpx;height:40rpx;"></image>
+          </view>
+          <view class="name">甲方</view>
+        </view>
+      </view>
+    </view>
+    <view class="model">
+      <view class="avatar">
+        <image class="av_img" src="../../images/home/model.png"></image>
+      </view>
+      <view class="select">
+        <view @tap="modelClick(1)">
+          <view class="circle" wx:if="{{model_index==0}}">
+            <image src="../../images/home/circle_default.png" style="width: 40rpx;height:40rpx;"></image>
+          </view>
+          <view class="circle" wx:else>
+            <image src="../../images/home/circle.png" style="width: 40rpx;height:40rpx;"></image>
+          </view>
+          <view class="name">兼职</view>
+        </view>
+      </view>
+    </view>
+    <view class="action">
+      <button class="btn" @tap='goHome'>确认</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from "wepy";
+  import Tips from '@/utils/Tips';
+  import { isEmptyObject } from '@/utils/index';
+  import { getLogin, getUserInfo } from "@/api/api_wechat.js";
+  export default class Identity extends wepy.page {
+    config = {
+      navigationBarTitleText: "选择身份",
+      disableScroll: true
+    };
+    data = {
+      party_index: 0,
+      model_index: 0,
+      // 是否授权
+      isToAccreditPage: false,
+      // 是否上传过资料
+      isDataUpload: false
+    };
+    methods = {
+      partyClick(val) {
+        this.party_index = 1
+        this.model_index = 0
+        this.$apply()
+      },
+      modelClick(val) {
+        this.party_index = 0
+        this.model_index = 1
+        this.$apply()
+      }
+    };
+    // 判断是否上传资料
+    DataUpload() {
+      getUserInfo({
+        uid: wx.getStorageSync('uid')
+      }).then(res => {
+        // 甲方跳转
+        if (this.party_index == 1) {
+          wx.setStorageSync('Identity', '1')
+          if (!isEmptyObject(res.info.companyInfo)) {
+            // 已上传过资料去首页
+            wx.switchTab({
+              url: "/pages/home/index"
+            });
+          } else {
+            // 未上传资料去上传资料
+            wx.navigateTo({
+              url: "/pages/my/information/info_upload"
+            });
+          }
+        }
+        // 兼职跳转
+        if (this.model_index == 1) {
+          wx.setStorageSync('Identity', '0')
+          if (res.info.mobileno) {
+            // 已上传过资料去首页
+            wx.redirectTo({
+              url: "/pages/home/model_index"
+            });
+          } else {
+            // 未上传资料去上传资料
+            wx.navigateTo({
+              url: "/pages/my/information/model_info_upload"
+            });
+          }
+        }
+      })
+    };
+    // 确定身份跳转
+    goHome() {
+      if (this.party_index != 0 || this.model_index != 0) {
+        this.DataUpload()
+      } else {
+        Tips.alert("请先选择身份!");
+      }
+    };
+    //获取用户临时登录凭证code
+    wxLogin() {
+      var that = this;
+      wx.login({
+        success: function (res) {
+          return that.wxSetting(res.code);
+        }
+      });
+    }
+    // 获取用户是否授权
+    wxSetting(code) {
+      var that = this;
+      wx.getSetting({
+        success: function (res) {
+          if (res.authSetting["scope.userInfo"]) {
+            // 已经授权，直接调用 getUserInfo 获取头像昵称
+            that.wxUserInfo(code);
+          } else {
+            // 未授权，跳转到授权页面
+            that.isToAccreditPage = true;
+            that.$apply();
+            wx.navigateTo({
+              url: "/pages/accredit/index"
+            });
+          }
+        }
+      });
+    }
+    // 获取微信用户信息
+    wxUserInfo(code) {
+      var that = this;
+      wx.getUserInfo({
+        withCredentials: true,
+        success: function (res) {
+          wepy.$store.dispatch({
+            type: "GETUSERINFO",
+            payload: res.userInfo
+          });
+          that.get_login(code, res.userInfo.nickName, res.userInfo.avatarUrl)
+        }
+      });
+    }
+    // 获取CT_token 和 uid
+    get_login(code, nickName, avatarUrl) {
+      getLogin({
+        code: code,
+        nickName: nickName,
+        avatarUrl: avatarUrl
+      }).then(res => {
+        wx.setStorageSync("uid", res.info.uid);
+        wx.setStorageSync("CT_token", res.info.CT_token);
+        getUserInfo({
+          uid: res.info.uid
+        }).then(item => {
+          if (!isEmptyObject(item.info.companyInfo)) {
+            //甲方 已上传过资料去首页
+            wx.switchTab({
+              url: "/pages/home/index"
+            });
+            return;
+          }
+          if (item.info.mobileno) {
+            //model 已上传过资料去首页
+            wx.redirectTo({
+              url: "/pages/home/model_index"
+            });
+            return
+          }
+        })
+      });
+    }
+    onShow() {
+      if (this.isToAccreditPage) {
+        this.wxLogin();
+        this.isToAccreditPage = false
+        this.$apply()
+      }
+    };
+    onLoad() {
+      this.wxLogin();
+    };
+  }
+</script>
+<style lang="scss">
+  page {
+    background-color: #f8f8fb;
+  }
+
+  .identity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 40rpx;
+  }
+
+  .party_a,
+  .model {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    text-align: center;
+  }
+
+  .avatar {
+    width: 300rpx;
+    height: 300rpx;
+    /* border: 5rpx solid #398ffd; */
+    /* border-radius: 50%; */
+    margin: 0 auto;
+
+    .av_img {
+      width: 300rpx;
+      height: 300rpx;
+      /* border-radius: 50%; */
+    }
+  }
+
+  .circle,
+  .name {
+    float: left;
+  }
+
+  .circle {
+    margin-right: 10px;
+  }
+
+  .select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100rpx;
+  }
+
+  .btn {
+    margin: 0 30rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    background-color: #398ffd;
+    box-shadow: 2rpx 4rpx 24rpx 0 rgba(172, 199, 198, 0.56);
+    margin-top: 40rpx;
+    font-size: 30rpx;
+    color: #ffffff;
+    border-radius: 50rpx;
+  }
+</style>

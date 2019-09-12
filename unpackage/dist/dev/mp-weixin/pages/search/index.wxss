@@ -1,0 +1,31 @@
+
+.title-sty{
+	font-size: 18px;
+	font-weight: 600;
+	color: black;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	height: 88rpx;
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	background-color: #ffffff;
+}
+.title-sty view{
+	line-height: 88rpx;
+}
+.whiteBlock1{
+	height: 132rpx;
+	position: fixed;
+	background-color: #FFFFFF;
+	width: 100%;
+	z-index: 999;
+}
+.whiteBlock2{
+	height: 88rpx;
+	background: #FFFFFF;
+	width: 100%;
+	padding-top: 132rpx;
+}
+

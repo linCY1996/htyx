@@ -1,0 +1,39 @@
+
+.nav{
+	background: #178ab6;
+	height: 270px;
+}
+.paddingTop01{
+	padding-top: 30px;
+}
+.paddingTop02{
+	padding-top: 50px;
+}
+.title-sty{
+	font-size: 18px;
+	font-weight: 600;
+	color: white;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+.inputShadow{ 
+	padding-left: 10px;
+	border-radius: 6px;
+	-webkit-box-shadow: 0 0 6px #c0c0c0;
+	        box-shadow: 0 0 6px #c0c0c0;
+	cursor: auto;
+	display: block;
+	height: 1.4rem;
+	-o-text-overflow: clip;
+	   text-overflow: clip;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.jian{ /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(rgba(0,0,0,0),black); /* Opera 11.1 - 12.0 */ /* Firefox 3.6 - 15 */
+    background: -webkit-gradient(linear,left top, left bottom,from(rgba(0,0,0,0)),to(black));
+    background: linear-gradient(rgba(0,0,0,0),black); /* 标准的语法（必须放在最后） */
+}
+

@@ -1,0 +1,96 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: 'dateTime组件' 
+ * @Date: 2018-07-02 18:10:45 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-07-02 18:10:45 
+ -->
+
+<template>
+  <view class="weui-cell weui-cell_select">
+    <view class="weui-cell__bd">
+      <view class="placeholder date">
+        <picker mode="date" start="{{startdate}}" value="{{date}}" @change="bindDateChange">
+          <view class="tui-picker-detail {{date=='请选择日期'?'default':''}}">
+            {{date}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="weui-cell__ft weui-cell__ft_in-access">
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import { getTime } from '../../utils/index.js'
+
+  export default class DateTimePicker extends wepy.component {
+    props = {
+      title: {
+        type: String,
+        default: '当前时间'
+      },
+      value: {
+        type: String,
+        default: '请选择日期',
+        twoWay: true
+      },
+      startdate: {
+        type: String,
+        default: '',
+        twoWay: true
+      }
+    };
+    data = {
+      date: '请选择日期'
+    };
+    onLoad() {
+      // var dateTime = getTime('parse').split(' ')
+      // this.date = dateTime[0]
+      // this.value = this.date
+      // if (this.value) {
+      //   this.date = this.value;
+      //   this.$apply()
+      // }
+    }
+    watch = {
+      value() {
+        if (this.value) {
+          this.date = this.value;
+          this.$apply()
+        } else {
+          this.date = '请选择日期'
+          this.$apply()
+        }
+      }
+    }
+    methods = {
+      bindDateChange(e) {
+        this.date = e.detail.value
+        this.value = this.date
+        this.$apply()
+      }
+    };
+    events = {};
+  }
+</script>
+
+<style lang="scss">
+  .placeholder {
+    padding: 0 10rpx 0 0;
+    text-align: left;
+    height: 2.3em;
+    line-height: 2.3em;
+  }
+
+  .date {
+    flex: 2.5;
+    text-align: left;
+  }
+
+  .tui-picker-detail.default {
+    color: #a7afbf;
+  }
+</style>

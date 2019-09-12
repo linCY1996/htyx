@@ -1,0 +1,1 @@
+<view><staff-index vue-id="1" bind:__l="__l"></staff-index></view>

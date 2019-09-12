@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "index-page": "/components/bosspages/index",
+    "cart-page": "/components/bosspages/cart",
+    "me-page": "/components/bosspages/me",
+    "footer-nav": "/components/footer_nav"
+  }
+}

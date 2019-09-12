@@ -1,0 +1,241 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '提交订单' 
+ * @Date: 2018-12-11 10:23:02 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-11 10:23:02 
+ -->
+<template>
+  <view class="SubmitOrders">
+    <scroll-view scroll-x="true" class="x-scroll-view">
+      <repeat for="{{evListData}}" key="index" index="index" item="item">
+        <view class="orders_model_index">
+          <image class="index_img" src="{{item.pic[0]}}"></image>
+          <view class="index_info">
+            <view class="info_name">
+              <view class="name">{{item.nickName}}</view>
+              <view class="number_date">{{item.price}}/天</view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </scroll-view>
+    <view class="order-box">
+      <input_name title="活动名称" fieldName='activeName' :input.sync="input" maxlength="18" />
+      <location title="活动地点">
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__bd">
+            <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+              <view class="weui-select weui-select_in-select-after" style="border:none;" wx:if="{{region.length>1}}">
+                {{region[0]}}，{{region[1]}}，{{region[2]}}
+              </view>
+              <view class="weui-select weui-select_in-select-after default" style="border:none;" wx:else>
+                请选择
+              </view>
+            </picker>
+          </view>
+        </view>
+      </location>
+      <input_address fieldName='address' title="详细地址" :input.sync="input" maxlength="20" />
+      <starttime title="开始时间">
+        <startDateTime :value.sync='startTime'></startDateTime>
+      </starttime>
+      <endtime title="结束时间">
+        <endDateTime :value.sync='endTime' :startdate.sync='startTime'></endDateTime>
+      </endtime>
+      <duration title="活动时长">
+        <view style="color:#dc143c;">
+          {{durationCount}}{{durationCount?'天':''}}
+        </view>
+      </duration>
+      <input_remake fieldName='require' title="活动要求" :input.sync="input" maxlength="300" placeholder='请输入其他要求（限300字）' />
+    </view>
+    <view class="money-count">总价：<view class="money">￥{{moneyCount}}</view>
+    </view>
+  </view>
+  <actionBar textSec="提交订单" noOnly="1" @tap.user="confirm"></actionBar>
+</template>
+
+<script>
+  import wepy from "wepy";
+  import weuiInput from "@/components/weui/input";
+  import weuiSelect from "@/components/weui/inputSelect";
+  import actionBar from "@/components/common/action_bar";
+  import pickerDateTime from '@/components/weui/pickerDateTime'
+  import { TimeDifference } from '@/utils/index'
+  import Tips from '@/utils/Tips';
+  import { addorder } from "@/api/api_wechat.js";
+  export default class SubmitOrders extends wepy.page {
+    config = {
+      navigationBarTitleText: "提交订单",
+      disableScroll: true
+    };
+    components = {
+      actionBar: actionBar,
+      input_name: weuiInput,
+      input_address: weuiInput,
+      input_start: weuiInput,
+      input_end: weuiInput,
+      input_remake: weuiInput,
+      duration: weuiSelect,
+      endtime: weuiSelect,
+      starttime: weuiSelect,
+      location: weuiSelect,
+      endDateTime: pickerDateTime,
+      startDateTime: pickerDateTime
+    };
+    data = {
+      evListData: [],
+      // 活动地点
+      region: [],
+      durationCount: '',
+      moneyCount: 0,
+      startTime: '',
+      endTime: '',
+      input: {
+        ids: '',
+        activeName: '',
+        cityAddress: '',
+        address: '',
+        require: '',
+        startTime: '',
+        endTime: '',
+      }
+    };
+    watch = {
+      startTime(val) {
+        this.input.startTime = val
+        this.input.endTime = ''
+        this.endTime = ''
+        this.$apply()
+      },
+      endTime(val) {
+        if (this.startTime && this.endTime) {
+          this.durationCount = TimeDifference(this.startTime, this.endTime)
+          this.input.endTime = val
+          this.$apply()
+        }
+      }
+    }
+    methods = {
+      bindRegionChange(e) {
+        this.region = e.detail.value
+        this.input.cityAddress = (e.detail.value).toString()
+        this.$apply()
+      },
+      confirm() {
+        this.addOrder()
+      }
+    };
+    addOrder() {
+      if (this.input.startTime && this.input.endTime && this.input.cityAddress && this.input.activeName && this.input.require) {
+        addorder(this.input).then(res => {
+          Tips.alert("提交成功!");
+          wx.removeStorage({
+            key: 'orderModelList',
+            success(res) {
+              wx.switchTab({
+                url: '/pages/home/index'
+              })
+            }
+          })
+        })
+      } else {
+        Tips.alert("活动名称，起始时间，地点，要求必填!");
+      }
+    }
+    onLoad() {
+      var than = this
+      wx.getStorage({
+        key: 'orderModelList',
+        success: (res) => {
+          than.evListData = JSON.parse(res.data)
+          var arr = []
+          for (let i = 0, len = than.evListData.length; i < len; i++) {
+            arr.push(than.evListData[i].id)
+            than.moneyCount = parseFloat(than.moneyCount) + parseFloat(than.evListData[i].price)
+            than.$apply()
+          }
+          than.input.ids = arr.toString()
+          than.$apply()
+        }
+      })
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .x-scroll-view {
+    width: 100vw;
+    display: flex;
+    white-space: nowrap;
+  }
+
+  .orders_model_index:first-child {
+    padding-left: 10rpx;
+  }
+
+  .orders_model_index {
+    display: inline-block;
+    width: 300rpx;
+    height: 300rpx;
+    padding: 10rpx 10rpx 0 0;
+    position: relative;
+
+    .index_img {
+      width: 300rpx;
+      height: 300rpx;
+    }
+
+    .index_info {
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 0;
+      width: calc(100% - 20rpx);
+      padding: 10rpx 20rpx;
+      height: 150rpx;
+
+      background: rgba(255, 255, 255, .5);
+
+      .info_name {
+        text-align: center;
+
+        .name,
+        .number_date {
+          font-size: 45rpx;
+        }
+
+        .number_date {
+          color: #dc143c;
+        }
+      }
+    }
+
+  }
+
+  .order-box {
+    background: #fff;
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+
+  .money-count {
+    margin-top: 10rpx;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 45rpx;
+
+    .money {
+      display: inline-block;
+      font-weight: 600;
+      font-size: 45rpx;
+      color: #dc143c;
+    }
+  }
+</style>

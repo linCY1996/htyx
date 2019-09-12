@@ -1,0 +1,186 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '图片上传控件' 
+ * @Date: 2018-12-13 11:15:44 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-13 11:15:44 
+ -->
+
+<template>
+  <view class="example-case">
+    <view class="picture">
+      <repeat for="{{imgList}}" key="index" index="index" item="item">
+        <view class="demo-upload-list">
+          <image class="list-img" @tap='imgYu({{item}})' src="{{item}}"></image>
+          <span class="demo-upload-list-remove iconfont icon-cancel" @tap='removeImage({{item}},{{index}})'></span>
+        </view>
+      </repeat>
+    </view>
+    <view class="demo-upload-drag" @tap='chooseimage' wx:if="{{imgList.length<count}}">
+      <view class="demo-upload-add">+</view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+  import { getqiniutoken } from '@/api/api_wechat.js'
+  import { getCaption } from '@/utils/index.js'
+  import Tips from '@/utils/Tips';
+  import qiniuUploader from "@/utils/qiniuUploader"
+
+  export default class imageBar extends wepy.component {
+    components = {};
+    props = {
+      count: {
+        default: 1
+      }
+    };
+    data = {
+      item: {},
+      // 用于图片列表
+      imgList: [],
+      // 剩余总数
+      counts: 0
+    };
+    events = {};
+    onLoad() {
+      this.counts = this.count
+      this.$apply()
+    }
+    methods = {
+      imgYu(src) {
+        if (src) {
+          var list = []
+          for (let i = 0; i < this.imgList.length; i++) {
+            list.push(this.imgList[i])
+          }
+          //图片预览
+          wx.previewImage({
+            current: src, // 当前显示图片的http链接
+            urls: list // 需要预览的图片http链接列表
+          })
+        }
+      },
+      removeImage(val, index) {
+        this.imgList.splice(index, 1)
+        this.counts = this.count - this.imgList.length
+        this.$emit('getFileIds', this.imgList);
+        this.$apply()
+      },
+      chooseimage() {
+        var that = this
+        wx.showActionSheet({
+          itemList: ['从相册中选择', '拍照'],
+          success: function (res) {
+            if (!res.cancel) {
+              if (res.tapIndex == 0) {
+                that.chooseWxImage('album')
+              } else if (res.tapIndex == 1) {
+                that.chooseWxImage('camera')
+              }
+            }
+          }
+        })
+      }
+    };
+    // 选择上传方式
+    chooseWxImage(type) {
+      var that = this;
+      wx.chooseImage({
+        count: that.counts,
+        sizeType: ['original', 'compressed'],
+        sourceType: [type],
+        success: function (res) {
+          console.log(res)
+          var imgSize = res.tempFiles[0].size;
+          var imgPath = res.tempFiles[0].path;
+          var imgType = getCaption(imgPath).toLowerCase();
+          if (imgType != 'jpg' && imgType != 'jpeg' && imgType != 'gif' && imgType != 'png') {
+            Tips.alert("格式不正确!");
+          } else {
+            if (imgSize / (1024 * 1024) >= 20) {
+              Tips.alert("须小于20MB!");
+            } else {
+              that.uploadPhoto(res.tempFilePaths[0]);
+            }
+          }
+        }
+      })
+    };
+    // 上传图片s
+    uploadPhoto(path) {
+      Tips.loading()
+      qiniuUploader.upload(path, (res) => {
+        // 每个文件上传成功后,处理相关的事情
+        // console.log(res)
+        this.imgList.push(res.imageURL)
+        this.counts = this.count - this.imgList.length
+        this.$emit('getFileIds', this.imgList);
+        this.$apply()
+        Tips.loaded()
+      }, (error) => {
+        console.log('error: ' + error);
+      }, {
+        region: 'ECN',
+        domain: 'http://dolphinimg.blockdai.com', // bucket 域名，下载资源时用到。如果设置，会在 success callback 的 res 参数加上可以直接使用的 ImageURL 字段。否则需要自己拼接
+        uptokenURL: 'https://dolphin.blockdai.com/?action=getqiniutoken', // 由其他程序生成七牛 uptoken
+      }, (res) => {
+        console.log('上传进度', res.progress)
+        console.log('已经上传的数据长度', res.totalBytesSent)
+        console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+      });
+    }
+  }
+</script>
+<style lang="scss">
+  @import '../../styles/variable';
+
+
+  .demo-upload-list {
+    float: left;
+    width: 150rpx;
+    height: 150rpx;
+    text-align: center;
+    line-height: 200rpx;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+    margin-right: 4px;
+  }
+
+  .demo-upload-list-remove {
+    width: 40rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    background: rgba(0, 0, 0, .6);
+    /* border-bottom-left-radius: 90%; */
+    color: #fff;
+    top: 0;
+    right: 0;
+    font-size: 26rpx;
+    position: absolute;
+  }
+
+  .demo-upload-drag {
+    float: left;
+    width: 150rpx;
+    height: 150rpx;
+    line-height: 145rpx;
+    text-align: center;
+    border: 1px solid #a7afbf;
+    border-radius: 2px;
+  }
+
+  .demo-upload-add {
+    font-size: 45rpx;
+    color: #a7afbf;
+  }
+
+  .demo-upload-list .list-img {
+    width: 100%;
+    height: 100%;
+  }
+</style>

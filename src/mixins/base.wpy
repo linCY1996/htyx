@@ -1,0 +1,80 @@
+<script>
+  import wepy from 'wepy';
+  import Tips from '../utils/Tips';
+  import { getLogin } from "@/api/api_wechat"
+
+  export default class base extends wepy.mixin {
+    loaded() {
+      this.init = true;
+      this.$apply();
+      Tips.loaded();
+    }
+    // 卸载清理
+    onUnload() {
+      Object.assign(this, this.def);
+    }
+    //获取用户临时登录凭证code
+    wxLogin() {
+      var that = this;
+      return new Promise((resolve, reject) => {
+        wx.login({
+          success: function (res) {
+            that.wxSetting(res.code).then((res) => {
+              resolve(true)
+            });
+          }
+        });
+      })
+    };
+    // 获取用户是否授权
+    wxSetting(code) {
+      var that = this;
+      return new Promise((resolve, reject) => {
+        wx.getSetting({
+          success: function (res) {
+            if (res.authSetting["scope.userInfo"]) {
+              that.wxUserInfo(code, res.userInfo.nickName, res.userInfo.avatarUrl).then((res) => {
+                resolve(true)
+              });
+            } else {
+              wx.navigateTo({
+                url: "/pages/accredit/index"
+              });
+              reject(false)
+            }
+          }
+        });
+      })
+    };
+    // 获取openid
+    wxUserInfo(code, nickName, avatarUrl) {
+      var that = this;
+      return new Promise((resolve, reject) => {
+        wx.getUserInfo({
+          withCredentials: true,
+          success: function (res) {
+            wepy.$store.dispatch({
+              type: "GETUSERINFO",
+              payload: res.userInfo
+            });
+            getLogin({
+              code: code,
+              nickName: nickName,
+              avatarUrl: avatarUrl
+            }).then(res => {
+              if (res.code == 0) {
+                wx.setStorageSync("uid", res.info.uid);
+                wx.setStorageSync("CT_token", res.info.CT_token);
+                resolve(true)
+              } else {
+                that.$root.$navigate('/pages/officialAccounts/index');
+                reject(false)
+              }
+            });
+          }
+        });
+      })
+    };
+    methods = {}
+  }
+</script>

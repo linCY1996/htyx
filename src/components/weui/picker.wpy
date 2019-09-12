@@ -1,0 +1,64 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '从底部弹起的滚动选择器' 
+ * @Date: 2018-06-26 21:25:34 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-06-26 21:25:34 
+ -->
+<template>
+  <view class="weui-cell weui-cell_select">
+    <view class="weui-cell__bd">
+      <picker @change="input" range="{{range}}" range-key="{{rangeKey}}">
+        <view class="weui-select weui-select_in-select-after {{seletedKey=='请选择'?'default':''}}" style="border:none;">{{seletedKey}}</view>
+      </picker>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Picker extends wepy.component {
+    props = {
+      range: {
+        type: Array,
+        default: [],
+      },
+      rangeValue: {
+        default: 'id'
+      },
+      rangeKey: {
+        default: 'name'
+      },
+      selectedId: {
+        default: ''
+      },
+    };
+    data = {};
+    computed = {
+      seletedKey(e) {
+        const seletedItem = this.range.find(item => item[this.rangeValue] == this.selectedId);
+        return seletedItem ? seletedItem[this.rangeKey] : '请选择';
+      }
+    };
+    methods = {
+      input(e) {
+        const seletdItem = this.range[e.detail.value];
+        this.selectedId = seletdItem[this.rangeValue]
+        this.$emit('input', seletdItem);
+      }
+    };
+    events = {};
+  }
+</script>
+
+<style lang="scss">
+  @import "../../styles/variable";
+
+  .weui-cell.weui-cell_select {
+    border-bottom: none;
+  }
+
+  .default {
+    color: #a7afbf;
+  }
+</style>

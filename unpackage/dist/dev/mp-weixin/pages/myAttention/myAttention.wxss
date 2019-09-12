@@ -1,0 +1,109 @@
+
+.swiper-item{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	height: 100rpx;
+	width: 95%;
+	margin: 1% auto;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	border: 1px solid #dddddd;
+	border-radius: 10rpx;
+}
+.swiper-item view{
+	padding:1%;
+}
+.swiper-item .headpic{
+	width: 13%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	    -ms-flex-align: center;
+	        align-items: center
+}
+.swiper-item .userInfo{
+	width: 58%;
+}
+.swiper-item .nav{
+	width: 23%;
+	text-align: right;
+	line-height: 100rpx;
+}
+.myInfo,.centerNav,.oderList,.nav80{
+	width: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	    -ms-flex-wrap: wrap;
+	        flex-wrap: wrap;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	background-color: #FFFFFF;
+}
+.navItem{
+	width: 25%;
+	height: 80%;
+	text-align: center;
+	color: #50b1ff;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+.navSelect{
+
+	border-bottom: 5rpx solid #50b1ff;
+}
+.centerNav,.oderList{
+	margin-top: 30rpx;
+}
+.myInfo{
+	height: 225rpx;
+}
+.centerNav{
+	height: 70rpx;
+	font-size: 35rpx;
+}
+.title-sty{
+	font-size: 18px;
+	font-weight: 600;
+	color: black;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	height: 88rpx;
+	position: fixed;
+	z-index: 999;
+	width: 100%;
+	background-color: #ffffff;
+}
+.title-sty view{
+	line-height: 88rpx;
+}
+.whiteBlock1{
+	height: 132rpx;
+	position: fixed;
+	background-color: #FFFFFF;
+	width: 100%;
+	z-index: 999;
+}
+.whiteBlock2{
+	height: 88rpx;
+	background: #FFFFFF;
+	width: 100%;
+	padding-top: 132rpx;
+}
+

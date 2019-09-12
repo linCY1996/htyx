@@ -1,0 +1,132 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '微信授权' 
+ * @Date: 2018-12-10 16:31:56 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-10 16:31:56 
+ -->
+<template>
+  <view class="accredit">
+    <view class="accredit-img">
+      <image src="../../images/my/accredit.png" style="width:400rpx;height:380rpx;" />
+    </view>
+    <view wx:if="{{isAccredit}}" class="accredit-desc">
+      <view class="row">申请获取您的公开信息(昵称、头像等)！</view>
+      <view class="row">获得小程序部分功能！</view>
+    </view>
+    <view wx:if="{{!isAccredit}}" class="accredit-refuse">
+      <view class="row">您选择“拒绝”获取您的公开信息</view>
+      <view class="row">小程序部分功能无法正常使用，请谅解！</view>
+    </view>
+    <button wx:if="{{isAccredit}}" class="btn" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+    <button wx:if="{{!isAccredit}}" class="btn" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">重新授权 </button>
+  </view>
+
+</template>
+
+<script>
+  import wepy from "wepy";
+
+  export default class Accredit extends wepy.page {
+    data = {
+      isAccredit: true // 是否授权  默认：true
+    };
+    methods = {
+      toHomeIndex() {
+        wx.switchTab({
+          url: "/pages/home/index"
+        });
+      }
+    };
+    bindGetUserInfo(e) {
+      if (e.detail.userInfo) {
+        wepy.$store.dispatch({
+          type: "GETUSERINFO",
+          payload: e.detail.userInfo
+        });
+        wx.navigateBack();
+        this.isAccredit = true;
+        this.$apply();
+      } else {
+        this.isAccredit = false;
+        this.$apply();
+      }
+    }
+    config = {
+      navigationBarTitleText: "微信授权登录"
+    };
+  }
+</script>
+<style lang="scss">
+  page {
+    background-color: #ffffff;
+  }
+
+  .accredit {
+    text-align: center;
+
+    .accredit-img {
+      image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        margin: 100px auto 0px auto;
+      }
+
+      text {
+        font-size: 33rpx;
+        color: #398ffd;
+        letter-spacing: 1px;
+      }
+    }
+
+    .accredit-name {
+      width: 100%;
+      height: 48rpx;
+      font-size: 34rpx;
+      color: rgba(95, 104, 118, 1);
+      line-height: 48rpx;
+      margin: 6rpx auto 0;
+      text-align: center;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+
+    .accredit-desc,
+    .accredit-refuse {
+      color: #5f6876;
+      font-size: 30rpx;
+      margin-top: 60rpx;
+      width: 100%;
+      text-align: center;
+
+      .row {
+        height: 52rpx;
+        width: 300px;
+        line-height: 52rpx;
+        color: #999;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+
+    .accredit-refuse {
+      .row {
+        color: #ff8726;
+      }
+    }
+
+    .btn {
+      margin: 0 30rpx;
+      height: 80rpx;
+      line-height: 80rpx;
+      text-align: center;
+      background-color: #398ffd;
+      box-shadow: 2rpx 4rpx 24rpx 0 rgba(172, 199, 198, 0.56);
+      margin-top: 40rpx;
+      font-size: 30rpx;
+      color: #ffffff;
+      border-radius: 50rpx;
+    }
+  }
+</style>

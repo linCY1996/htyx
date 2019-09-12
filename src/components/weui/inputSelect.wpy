@@ -1,0 +1,40 @@
+<!--
+ * @Author: 魏明丽 
+ * @pageName: '表单-input框带picker' 
+ * @Date: 2018-09-18 16:37:17 
+ * @Last Modified by:   魏明丽 
+ * @Last Modified time: 2018-09-18 16:37:17 
+ -->
+
+<template>
+  <view class="weui-cell weui-cell_input">
+    <view class="weui-cell__hd">
+      <view class="weui-label">{{title}}</view>
+    </view>
+    <view class="line" style="width:1px;margin-right:30rpx;color: #a7afbf;">|</view>
+    <view class="weui-cell__bd">
+      <slot></slot>
+    </view>
+    <view class="weui-cell__ft">
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class InputText extends wepy.component {
+    props = {
+      title: {},
+    };
+
+    onLoad() {}
+
+    methods = {};
+    events = {};
+  }
+</script>
+
+<style lang="scss">
+  @import '../../styles/variable';
+</style>

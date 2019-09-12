@@ -1,0 +1,1 @@
+<view data-event-opts="{{[['tap',[['switch_loading',['$event']]]]]}}" hidden="{{!(is_loading=='1')}}" class="loading_box" bindtap="__e"><view class="loading"><image class="rotate" src="https://www.mastervan.cn/static/project/dolphin/static/loading2.png" mode></image></view></view>

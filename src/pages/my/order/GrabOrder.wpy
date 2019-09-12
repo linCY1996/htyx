@@ -1,0 +1,73 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '确认订单页' 
+ * @Date: 2019-04-23 15:11:32 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2019-04-23 15:11:32 
+ -->
+<template>
+  <view class="GrabOrderIndex">
+    <techType title="活动名称">
+      <text>红星美凯龙开业庆典</text>
+    </techType>
+    <techTime title="活动时间">
+      <text>2018-07-24——2018-07-30</text>
+    </techTime>
+    <techDidian title="活动地点">
+      <text>四川省成都高新区</text>
+    </techDidian>
+    <techJiage title="服务价格">
+      <text>800/天</text>
+    </techJiage>
+  </view>
+  <actionBar textSec="确认" noOnly="1" @tap.user="confirm"></actionBar>
+</template>
+<script>
+  import wepy from "wepy";
+  import weuiSelect from "@/components/weui/inputSelect";
+  import actionBar from "@/components/common/action_bar"
+  import { useractivity } from "@/api/api_wechat.js";
+  export default class GrabOrderIndex extends wepy.page {
+    config = {
+      disableScroll: true
+    };
+    components = {
+      techType: weuiSelect,
+      techTime: weuiSelect,
+      techDidian: weuiSelect,
+      techJiage: weuiSelect,
+      actionBar
+    }
+    data = {
+
+    };
+    onLoad(options) {
+      console.log(options)
+    }
+    methods = {
+      confirm() {
+
+      }
+    };
+    getData() {
+
+    }
+
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .GrabOrderIndex {
+    height: 100vh;
+    background-color: #fff;
+    margin-top: 10rpx;
+    padding: 10rpx 20rpx;
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+</style>

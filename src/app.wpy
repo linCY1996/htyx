@@ -1,0 +1,93 @@
+<style lang="scss" src="./styles/zent.scss"></style>
+<style lang="scss" src="./styles/base.scss"></style>
+<style lang="scss" src="./styles/weui.scss"></style>
+<style lang="scss" src="./styles/weui-extend.scss"></style>
+<style lang="scss" src="./styles/iconfont.scss"></style>
+
+<script>
+  import wepy from "wepy";
+  import "wepy-async-function";
+  import { setStore } from "wepy-redux";
+  import configStore from "./store";
+  const store = configStore();
+  setStore(store);
+  wepy.$store = store;
+  export default class extends wepy.app {
+    globalData = {
+      version: "v1.0.0"
+    };
+    config = {
+      pages: [
+        // 订单确定页
+        "pages/my/order/GrabOrder",
+        //选择身份
+        "pages/Identity/index",
+        //模特首页
+        "pages/home/model_index",
+        //首页
+        "pages/home/index",
+        //我的
+        "pages/my/index",
+        //授权
+        "pages/accredit/index",
+        //资料上传
+        "pages/my/information/info_upload",
+        //兼职资料上传
+        "pages/my/information/model_info_upload",
+        // 模特详情
+        "pages/home/modelDetail/index",
+        // 提交订单
+        "pages/home/SubmitOrders/index",
+        // 基本资料
+        "pages/my/information/index",
+        // 模特基本资料
+        "pages/my/information/model_index",
+        // 基本资料修改
+        "pages/my/information/info_update",
+        // 兼职职业修改
+        "pages/my/information/model_info_update",
+        // 订单
+        "pages/my/order/index",
+        // 手机修改
+        "pages/my/information/phone_update",
+      ],
+      window: {
+        backgroundTextStyle: "light",
+        navigationBarBackgroundColor: "#448aff",
+        navigationBarTitleText: "海豚美芽",
+        navigationBarTextStyle: "white",
+        enablePullDownRefresh: false
+      },
+      tabBar: {
+        color: "#a0a0a0",
+        selectedColor: "#448aff",
+        borderStyle: "white",
+        backgroundColor: "#ffffff",
+        list: [
+        {
+          iconPath: "images/tab/home.png",
+          selectedIconPath: "images/tab/home-active.png",
+          pagePath: "pages/home/index",
+          text: "首页"
+        },
+        {
+          iconPath: "images/tab/my.png",
+          selectedIconPath: "images/tab/my-active.png",
+          pagePath: "pages/my/index",
+          text: "我的"
+        }]
+      }
+    };
+
+    constructor() {
+      super();
+      this.use("requestfix");
+      this.use("promisify");
+      wx.showShareMenu({
+        withShareTicket: true
+      });
+    }
+
+    onLaunch() {};
+  }
+</script>

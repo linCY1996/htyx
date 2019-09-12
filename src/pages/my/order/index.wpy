@@ -1,0 +1,122 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '订单' 
+ * @Date: 2018-12-15 16:29:04 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-15 16:29:04 
+ -->
+
+<template>
+  <view class="OrderIndex">
+    <tabOrder-scroll @bindChange.user="change" />
+    <scroll-view class="y-scroll-view" scroll-y @scrolltolower="searchScrollLower">
+      <repeat for="{{evListData}}" key="index" index="index" item="item">
+        <view class="order_index">
+          <view class="index-tiltle">
+            <view class="title">{{item.activeName}}</view>
+            <view>{{item.startTime}}——{{item.endTime}}</view>
+          </view>
+          <view class="index-num">模特{{item.modelCount}}人 主持人{{item.etiquetteCount}}人</view>
+        </view>
+      </repeat>
+    </scroll-view>
+  </view>
+</template>
+<script>
+  import wepy from "wepy";
+  import Tab from 'kai-ui/Tab'
+  import { useractivity } from "@/api/api_wechat.js";
+  import { parseTime } from "@/utils/index.js";
+  export default class OrderIndex extends wepy.page {
+    config = {
+      navigationBarTitleText: "订单",
+      disableScroll: true
+    };
+    components = {
+      'tabOrder-scroll': Tab,
+    }
+    data = {
+      tab3: {
+        list: [{ id: 1, title: '待开始' }, { id: 2, title: '进行中' }, { id: 3, title: '已完成' }],
+        scroll: false,
+        selectedId: 1,
+        class: 'tabOder-success'
+      },
+      evListData: [],
+      page: 1,
+      maxPage: 1
+    };
+    onLoad() {
+      const { tab3 } = this
+      this.$invoke('tabOrder-scroll', 'doInitTabData', tab3)
+      this.getData()
+    }
+    methods = {
+      change(res) {
+        if (res != this.tab3.selectedId) {
+          this.page = 1
+          this.maxPage = 1
+          this.tab3.selectedId = res
+          this.getData()
+          this.$apply()
+        }
+      }
+    };
+    getData() {
+      useractivity({
+        type: this.tab3.selectedId,
+        page: this.page
+      }).then(res => {
+        if (this.page <= this.maxPage) {
+          this.page++;
+          this.maxPage = res.info.totalPage
+          this.evListData = res.info.list
+          this.dateFormat()
+          this.$apply()
+        }
+      })
+    }
+    searchScrollLower() {
+      if (this.page < this.maxPage) {
+        this.getData()
+      }
+    }
+    dateFormat() {
+      this.evListData.forEach(item => {
+        item.startTime = parseTime(item.startTime, "{m}.{d}")
+        item.endTime = parseTime(item.endTime, "{m}.{d}")
+      })
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .y-scroll-view {
+    height: calc(100vh - 47px);
+  }
+
+  .left {
+    float: left;
+  }
+
+  .tabOder-success .animate-border {
+    background-color: $color-primary !important;
+  }
+
+  .order_index {
+    background-color: #fff;
+    margin-top: 10rpx;
+    padding: 10rpx 20rpx;
+
+    .index-tiltle {
+      display: flex;
+      justify-content: space-between;
+      padding: 10rpx 0;
+
+      .title {
+        font-size: 35rpx;
+      }
+    }
+  }
+</style>

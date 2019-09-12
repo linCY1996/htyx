@@ -1,0 +1,72 @@
+<template>
+  <view class="BasicInfo">
+    <input_company title="公司名称">
+      {{companyInfo.compantName}}
+    </input_company>
+    <input_info title="对接人信息">
+      <view class="weui-cell weui-cell_select" @tap='goUpdate'>
+        <view class="weui-cell__bd"> {{companyInfo.contactName}}（{{companyInfo.contactPhone}}）</view>
+        <view class="weui-cell__ft  weui-cell__ft_in-access">
+        </view>
+      </view>
+    </input_info>
+    <attachment title="营业执照">
+      <image class="info_img" src="{{companyInfo.businessLicense}}"></image>
+    </attachment>
+  </view>
+</template>
+<script>
+  import wepy from "wepy";
+  import weuiSelect from "@/components/weui/inputSelect";
+  import { getUserInfo } from "@/api/api_wechat.js";
+  export default class BasicInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: "基本资料",
+      disableScroll: true
+    };
+    components = {
+      attachment: weuiSelect,
+      input_info: weuiSelect,
+      input_company: weuiSelect,
+    };
+    data = {
+      companyInfo: null
+    };
+    methods = {
+      goUpdate() {
+        var than = this
+        wx.navigateTo({
+          url: "/pages/my/information/info_update?companyId=" + than.companyInfo.id
+        });
+      }
+    };
+    events = {};
+    onShow() {
+      getUserInfo({
+        uid: wx.getStorageSync('uid')
+      }).then(res => {
+        this.companyInfo = res.info.companyInfo
+        this.$apply()
+      })
+    };
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .BasicInfo {
+    background: #fff;
+    margin-top: 30rpx;
+  }
+
+  .weui-cell.weui-cell_input {
+    position: static;
+    border-bottom: 1px solid #dfe8f6;
+    padding: 20rpx 30rpx;
+  }
+
+  .info_img {
+    width: 150rpx;
+    height: 150rpx;
+  }
+</style>

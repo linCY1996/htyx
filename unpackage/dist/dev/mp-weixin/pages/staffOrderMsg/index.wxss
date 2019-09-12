@@ -1,0 +1,28 @@
+
+.title-sty{
+	font-size: 18px;
+	font-weight: 600;
+	color: black;
+	letter-spacing: 4px;
+	text-align: center;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+.baseSty{
+	width: 100%;
+	overflow-x: hidden;
+    overflow-y: scroll;
+}
+.baseSty::-webkit-scrollbar {
+    display: none;
+}
+.paddingTop01{
+	padding-top: 30px;
+}
+.paddingTop02{
+	padding-top: 50px;
+}
+.ctrlSty{
+	margin-top: 30px;
+}
+

@@ -1,0 +1,213 @@
+<!--
+ * @Author: 黄龙 
+ * @pageName: '模特详情' 
+ * @Date: 2018-12-11 10:23:02 
+ * @Last Modified by:   黄龙 
+ * @Last Modified time: 2018-12-11 10:23:02 
+ -->
+<template>
+  <view class="modelDetail">
+    <view class="mode_info">
+      <view class="info_avatar">
+        <image class="avatar" src="{{dataDetail.avatar}}"></image>
+      </view>
+      <view class="info_data">
+        <view class="data_name">{{dataDetail.nickName}}
+          <tags type='primary' class="mode_tag">{{dataDetail.job==1?"模特":"礼仪"}}</tags>
+        </view>
+        <view class="data_mo">￥{{dataDetail.price}}/天</view>
+        <view class="data_num">已参加{{dataDetail.activityCount}}场活动</view>
+      </view>
+      <view class="info_score">
+        <view class="score_title">综合评分</view>
+        <view class="score_num">{{dataDetail.creadit}}</view>
+        <view class="score_star">
+          <block wx:for="{{stars}}" wx:key="index" wx:for-item="subItem">
+            <image class="star-image" style="left: {{subItem*10}}rpx" src="{{dataDetail.creadit > subItem ?selectedSrc : normalSrc}}"></image>
+          </block>
+        </view>
+      </view>
+    </view>
+    <view class="mode_schedule">档期：{{dataDetail.workStartTime}}~{{dataDetail.workEndTime}}</view>
+    <view class="action-bar row-center">
+      <view class="action primary-acton row-center" style="width: 100%;margin:0 10rpx;" @tap="confirm">
+        <text>加入需求</text>
+      </view>
+    </view>
+    <view class="mode_img" scroll-y>
+      <repeat for="{{dataDetail.pic}}" key="index" index="index" item="item">
+        <image class="img_index" mode='widthFix' src="{{item}}"></image>
+      </repeat>
+      <video class="img_index" style="height:100%;" src="{{dataDetail.video}}" wx:if='{{dataDetail.video}}'></video>
+    </view>
+  </view>
+  <!-- <actionBar textSec="加入需求" noOnly="1" @tap.user="confirm"></actionBar> -->
+</template>
+
+<script>
+  import wepy from "wepy";
+  import actionBar from "@/components/common/action_bar";
+  import Tag from 'kai-ui/Tag'
+  import Tips from '@/utils/Tips';
+  import { parseTime, IsIndexOf } from '@/utils/index'
+  export default class modelDetail extends wepy.page {
+    config = {
+      navigationBarTitleText: "详情",
+    };
+    components = {
+      actionBar: actionBar,
+      tags: Tag
+    };
+    data = {
+      stars: [0, 1, 2, 3, 4],
+      normalSrc: '../../../images/home/noStar.png',
+      selectedSrc: '../../../images/home/fullStar.png',
+      dataDetail: null
+    };
+    methods = {
+      confirm() {
+        var list = wx.getStorageSync('orderModelList')
+        if (!list) {
+          list = [this.dataDetail]
+          wx.setStorage({
+            key: 'orderModelList',
+            data: JSON.stringify(list),
+            success: function (res) {
+              Tips.alert("添加成功!").then(res => {
+                wx.navigateBack()
+              })
+            }
+          })
+        } else {
+          list = JSON.parse(list)
+          if (IsIndexOf(list, this.dataDetail, "id")) {
+            list.push(this.dataDetail)
+            wx.setStorage({
+              key: 'orderModelList',
+              data: JSON.stringify(list),
+              success: function (res) {
+                Tips.alert("添加成功!").then(res => {
+                  wx.navigateBack()
+                })
+              }
+            })
+          } else {
+            Tips.alert("已添加此用户，请勿重复添加!");
+          }
+        }
+      },
+    };
+    onLoad(params) {
+      const value = wx.getStorageSync('modelDetail')
+      if (value) {
+        this.dataDetail = JSON.parse(value)
+        this.dataDetail.createTime = this.parseDate(this.dataDetail.createTime)
+        this.dataDetail.workStartTime = this.parseDate(this.dataDetail.workStartTime)
+        this.dataDetail.workEndTime = this.parseDate(this.dataDetail.workEndTime)
+        this.$apply()
+      }
+    };
+    parseDate(val) {
+      if (val != 0) {
+        return parseTime(val, "{y}-{m}-{d}")
+      } else {
+        return "无"
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  @import "../../../styles/variable";
+
+  .modelDetail {
+    box-sizing: border-box;
+    height: calc(100vh - 100rpx);
+    margin-bottom: 100rpx;
+
+    .mode_info {
+      display: flex;
+      padding: 20rpx 10rpx 0 10rpx;
+      background-color: #fff;
+
+      .info_avatar {
+        margin-right: 10px;
+
+        .avatar {
+          height: 120rpx;
+          width: 120rpx;
+          border-radius: 50%;
+          border: 1px solid #eee;
+
+        }
+      }
+
+      .info_data {
+        flex: 2;
+
+        .data_name {
+          display: flex;
+          align-items: center;
+          font-size: 35rpx;
+          font-weight: 600;
+
+          .mode_tag {
+            margin-left: 10px;
+          }
+        }
+
+        .data_mo {
+          color: green;
+        }
+
+        .data_num {
+          font-size: 23rpx;
+          color: #999;
+        }
+      }
+
+      .info_score {
+        flex: 1.5;
+        background-color: #fff;
+        border: 1px solid #eee;
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+        .score_title {
+          color: #999;
+        }
+
+        .score_num {
+          font-size: 40rpx;
+          font-weight: 600;
+        }
+
+        .score_star {
+          .star-image {
+            width: 30rpx;
+            height: 30rpx;
+            margin-right: 10rpx;
+          }
+        }
+      }
+    }
+
+    .mode_schedule {
+      color: #999;
+      font-weight: 600;
+      font-size: 28rpx;
+      background-color: #fff;
+      padding: 0 20rpx 20rpx 20rpx;
+
+    }
+
+    .mode_img {
+      box-sizing: border-box;
+      padding: 10rpx 10rpx;
+      height: calc(100vh - (100rpx + 240rpx));
+
+      .img_index {
+        width: 100%;
+      }
+    }
+  }
+</style>
