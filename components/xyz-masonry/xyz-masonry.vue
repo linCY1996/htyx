@@ -4,7 +4,7 @@
 			<view style="width: 49%;border-radius: 8px;" >
 				<view class="card" v-for="(item, index) in list" v-if="index%2==0&&list!=''" :key="index" v-on:tap.stop="toOrder(item.userId)" style="background: white;">
 					<image class="imgBase"
-						:src="item.photoList[0]"
+						:src="item.photoList[0]" 
 						:mode="mode"
 						style="width: 100%;"
 						lazy-load

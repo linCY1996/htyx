@@ -31,7 +31,7 @@
 							<content :list="dataList"></content>
 						</view>
 					</scroll-view>
-				</swiper-item>
+				</swiper-item> 
 			</swiper>
 	<!-- 		</mescroll-uni> -->
 		</view>
@@ -123,57 +123,38 @@
 				   let addPage = _this.addPage
 				   addPage = 1
 				   _this.addPage = addPage
-				   uni.request({
-				   	url:_this.$store.state.baseurl+'/user/list',
-				   	data:{
-				   		openId:openid,
-				   		page: page,
-				   		cid: cid
-				   	},
-				   	method:'POST',
-				   	header : {'content-type':'application/x-www-form-urlencoded'},
-				   	success:function(res){
-				   		console.log(res.data)
-				   		let list=res.data.data.list;
-				   		if(list!=undefined){
-				   			_this.dataList=list;
-				   		}
-				   	}
-				   })		
+				   _this.$http.getList({
+					   openId:openid,
+					   page: page,
+					   cid: cid
+				   }).then(res => {
+					   let list=res.data.data.list;
+					   if(list!=undefined){
+					   	_this.dataList=list;
+					   }
+				   })
 			},
 			// 导航栏点击
 			navClick(index) {
 				this.currentTab = index	//设置swiper的第几页
 				this.tabClick = index	//设置导航点击了哪一个
 				this.navIndex=index
-				//console.log(this.navIndex)
-				//this.dataList=this.agents[index].list
-				//console.log(this.dataList)
-				
 				let openid=uni.getStorageSync('openid');
-				// console.log(openid)
 				let _this=this;
 				let cIndex=this.jobId[index];
 				_this.$store.commit('changeCid',cIndex)
-				this.cIndex=cIndex;
-				//console.log(cIndex)
-				uni.request({
-					url:_this.$store.state.baseurl+'/user/list',
-					data:{
-						openId:openid,
-						page:_this.isPage,
-						cid:cIndex
-					},
-					method:'POST',
-					header : {'content-type':'application/x-www-form-urlencoded'},
-					success:function(res){
-						console.log(res.data)
-						let list=res.data.data.list;
-						if(list!=undefined){
-							_this.dataList=list;
-						}
+				_this.cIndex=cIndex;
+				_this.$http.getList({
+					openId:openid,
+					page:_this.isPage,
+					cid:cIndex
+				}).then(res => {
+					let list=res.data.data.list;
+					if(list!=undefined){
+						_this.dataList=list;
 					}
 				})
+				
 			},
 			// swiper 滑动
 			swiperTab: function(e) {
@@ -192,72 +173,48 @@
 				// console.log(openid)
 				let _this=this;
 				_this.addPage+=1;
-				console.log(_this)
-				uni.request({
-					url:_this.$store.state.baseurl+'/user/list',
-					data:{
-						openId:openid,
-						page:_this.addPage,
-						cid:_this.cIndex
-					},
-					method:'GET',
-					header : {'content-type':'application/x-www-form-urlencoded'},
-					success:function(res){
-						//uni.hideLoading()
-						let list=res.data.data.list;
-						console.log(list)
-						if(list!=undefined){
-							for(let i in list){
-								_this.dataList.push(list[i]);
-							}
+				_this.$http.getList({
+					openId:openid,
+					page:_this.addPage,
+					cid:_this.cIndex
+				}).then(res => {
+					let list=res.data.data.list;
+					console.log(list)
+					if(list!=undefined){
+						for(let i in list){
+							_this.dataList.push(list[i]);
 						}
-						//console.log(_this.dataList)
 					}
 				})
+				
 			},
 			initData:function(){
 				let openid=uni.getStorageSync('openid');
 				// console.log(openid)
 				let _this=this;
-				uni.request({
-					url:_this.$store.state.baseurl+'/careerType/getType',
-					data:{
-						openId:openid
-					},
-					header : {'content-type':'application/x-www-form-urlencoded'},
-					method:'GET',
-					success: function (res) {
-						// console.log(res.data.data)
-						let arr1=[];
-						let arr2=[];
-						let dataArr=res.data.data;
-						for(let i in dataArr){
-							arr1.push(dataArr[i].cname);
-							arr2.push(dataArr[i].cid)
-						}
-						_this.jobArr=arr1;
-						_this.jobId=arr2;
+				_this.$http.getWork({
+					openId:openid
+				}).then(res => {
+					let arr1=[];
+					let arr2=[];
+					let dataArr=res.data.data;
+					for(let i in dataArr){
+						arr1.push(dataArr[i].cname);
+						arr2.push(dataArr[i].cid)
 					}
+					_this.jobArr=arr1;
+					_this.jobId=arr2;
 				})
-				
-				uni.request({
-					url:_this.$store.state.baseurl+'/user/list',
-					data:{
-						openId:openid,
-						page:_this.isPage,
-						cid:1
-					},
-					method:'POST',
-					header : {'content-type':'application/x-www-form-urlencoded'},
-					success:function(res){
-						//console.log(res.data.list)
-						console.log(res.data)
-						let list=res.data.data.list;
-						//console.log(list)
-						if(list!=undefined){
-							for (let i in list) {
-								_this.dataList.push(list[i]);
-							}
+				_this.$http.getList({
+					openId:openid,
+					page:_this.isPage,
+					cid:1
+				}).then(res => {
+					let list=res.data.data.list;
+					//console.log(list)
+					if(list!=undefined){
+						for (let i in list) {
+							_this.dataList.push(list[i]);
 						}
 					}
 				})

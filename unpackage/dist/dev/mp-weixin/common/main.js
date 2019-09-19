@@ -68,131 +68,131 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 {
   onLaunch: function onLaunch() {
-    console.log('App Launch');
-    var _this = this;
-    var openid = uni.getStorageSync('openid');
+    // console.log('App Launch');
+    // let _this=this;
+    // let openid=uni.getStorageSync('openid')
   },
   onShow: function onShow() {
-    console.log('App Show');
-    var _this = this;
-    var openid = uni.getStorageSync('openid');
-    uni.request({
-      url: _this.$store.state.baseurl + '/user/verifyRole',
-      data: {
-        openId: openid },
+    // console.log('App Show');
+    // let _this=this;
+    // let openid=uni.getStorageSync('openid')
+    // uni.request({
+    // 	url:_this.$store.state.baseurl+'/user/verifyRole',
+    // 	data:{
+    // 		openId:openid
+    // 	},
+    // 	method:"POST",
+    // 	header : {'content-type':'application/x-www-form-urlencoded'},
+    // 	success:function(res){
+    // 		let type=res.data.data;
+    // 		//console.log(type)
+    // 		if(type==-1){
+    // 			
+    // 		}else if(type==-2){
+    // 			// uni.reLaunch({
+    // 			// 	url:'/pages/login/index'
+    // 			// })
+    // 		}else if(type==0){
+    // 			uni.reLaunch({
+    // 				url:'/pages/status/index'
+    // 			})
+    // 		}else if(type==2){
+    // 			// uni.setStorageSync('userType',2)
+    // 			// uni.reLaunch({
+    // 			// 	url:'/pages/index/index'
+    // 			// })
+    // 		}else if(type==3){
+    // 			// uni.setStorageSync('userType',3)
+    // 			// uni.reLaunch({
+    // 			// 	url:'/pages/index01/index'
+    // 			// })
+    // 		}
+    // 	}
+    // })
 
-      method: "POST",
-      header: { 'content-type': 'application/x-www-form-urlencoded' },
-      success: function success(res) {
-        var type = res.data.data;
-        //console.log(type)
-        if (type == -1) {
-
-        } else if (type == -2) {
-          // uni.reLaunch({
-          // 	url:'/pages/login/index'
-          // })
-        } else if (type == 0) {
-          uni.reLaunch({
-            url: '/pages/status/index' });
-
-        } else if (type == 2) {
-          // uni.setStorageSync('userType',2)
-          // uni.reLaunch({
-          // 	url:'/pages/index/index'
-          // })
-        } else if (type == 3) {
-          // uni.setStorageSync('userType',3)
-          // uni.reLaunch({
-          // 	url:'/pages/index01/index'
-          // })
-        }
-      } });
-
-
-    var userType = uni.getStorageSync('userType');
-    if (userType == 3) {
-      //用户信息
-      var openId = uni.getStorageSync('openid');
-      uni.request({
-        url: _this.$store.state.baseurl + '/user/partTimeMessage',
-        data: {
-          openId: openId },
-
-        method: 'POST',
-        header: { 'content-type': 'application/x-www-form-urlencoded' },
-        success: function success(res) {
-          //let cart=res.data.data;
-          //_this.$store.commit('setCart',cart);
-          //console.log(_this.$store.state.cart)
-
-          uni.setStorageSync('cid', res.data.data.cid);
-          //websocket
-          var cid = res.data.data.cid;
-
-          var set = setInterval(function () {
-            uni.request({
-              url: _this.$store.state.baseurl + '/order/findOrderList',
-              data: {
-                cid: cid,
-                openId: openId },
-
-              method: 'POST',
-              header: { 'content-type': 'application/x-www-form-urlencoded' },
-              success: function success(res) {
-                //console.log(typeof res.data.data)
-                clearInterval(set);
-                var oldSt = JSON.stringify(res.data.data);
-
-                var order = res.data.data;
-                uni.request({
-                  url: _this.$store.state.baseurl + '/userOrder/findOrderId',
-                  data: {
-                    openId: openId },
-
-                  method: 'POST',
-                  header: { 'content-type': 'application/x-www-form-urlencoded' },
-                  success: function success(oidArr) {
-                    //console.log(oidArr.data.data)
-                    var arr3 = oidArr.data.data;
-                    var allOid = [];
-                    for (var i in arr3) {
-                      allOid.push(arr3[i].orderId);
-                    }
-                    console.log(allOid);
-
-
-                    //去除已抢订单
-                    function getArrEqual(arr1, arr2) {
-                      var newArr = [];
-                      for (var _i = 0; _i < arr2.length; _i++) {
-                        for (var j = 0; j < arr1.length; j++) {
-                          if (arr1[j] === arr2[_i].oid) {
-                            arr2.splice(_i, 1);
-                          }
-                        }
-                      }
-                      return arr2;
-                    }
-
-                    var st = JSON.stringify(getArrEqual(allOid, order));
-
-                    if (getArrEqual(allOid, order).length != 0) {
-                      uni.navigateTo({
-                        url: '/pages/competed/index?st=' + st });
-
-                    }
-                  },
-                  fail: function fail() {
-
-                  } });
-
-              } });
-
-          }, 30000);
-        } });
-
-    }
+    // let userType=uni.getStorageSync('userType');
+    // if(userType==3){
+    // 	//用户信息
+    // 	let openId=uni.getStorageSync('openid');
+    // 	uni.request({
+    // 		url:_this.$store.state.baseurl+'/user/partTimeMessage',
+    // 		data:{
+    // 			openId:openId
+    // 		},
+    // 		method:'POST',
+    // 		header : {'content-type':'application/x-www-form-urlencoded'},
+    // 		success:function(res){
+    // 			//let cart=res.data.data;
+    // 			//_this.$store.commit('setCart',cart);
+    // 			//console.log(_this.$store.state.cart)
+    // 			
+    // 			uni.setStorageSync('cid',res.data.data.cid)
+    // 			//websocket
+    // 			let cid=res.data.data.cid;
+    // 			
+    // 			let set=setInterval(function(){
+    // 				uni.request({
+    // 					url:_this.$store.state.baseurl+'/order/findOrderList',
+    // 					data:{
+    // 						cid:cid,
+    // 						openId:openId
+    // 					},
+    // 					method:'POST',
+    // 					header:{'content-type':'application/x-www-form-urlencoded'},
+    // 					success(res) {
+    // 						//console.log(typeof res.data.data)
+    // 						clearInterval(set);
+    // 						let oldSt=JSON.stringify(res.data.data);
+    // 						
+    // 						let order=res.data.data;
+    // 						uni.request({
+    // 							url:_this.$store.state.baseurl+'/userOrder/findOrderId',
+    // 							data:{
+    // 								openId:openId
+    // 							},
+    // 							method:'POST',
+    // 							header : {'content-type':'application/x-www-form-urlencoded'},
+    // 							success:function(oidArr){
+    // 								//console.log(oidArr.data.data)
+    // 								let arr3=oidArr.data.data;
+    // 								let allOid=[];
+    // 								for(let i in arr3){
+    // 									allOid.push(arr3[i].orderId)
+    // 								}
+    // 								console.log(allOid)
+    // 								
+    // 								
+    // 								//去除已抢订单
+    // 								function getArrEqual(arr1, arr2) {
+    // 								        let newArr = [];
+    // 								        for (let i = 0; i < arr2.length; i++) {
+    // 								            for (let j = 0; j < arr1.length; j++) {
+    // 								                if(arr1[j] === arr2[i].oid){
+    // 								                    arr2.splice(i,1)
+    // 								                }
+    // 								        }
+    // 								     }
+    // 								     return arr2;
+    // 								}
+    // 								
+    // 								let st=JSON.stringify(getArrEqual(allOid,order));
+    // 								
+    // 								if(getArrEqual(allOid,order).length!=0){
+    // 									uni.navigateTo({
+    // 										url:'/pages/competed/index?st='+st
+    // 									})
+    // 								}
+    // 							},
+    // 							fail() {
+    // 								
+    // 							}
+    // 						})
+    // 					}
+    // 				})
+    // 			},30000)
+    // 		 }
+    // 	})
+    // }
   },
   onHide: function onHide() {
     console.log('App Hide');

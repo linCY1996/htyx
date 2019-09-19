@@ -57,21 +57,12 @@
 			this.stateBarHeight = this.$store.state.statusBarHeight
 			let _this = this
 			let openId=uni.getStorageSync('openid');
-			uni.request({
-				url:_this.$store.state.baseurl+'/careerType/getType',
-				data:{
-					openId:openId,
-				},
-				method:'GET',
-				header : {'content-type':'application/x-www-form-urlencoded'},
-				success:function(res){
-					console.log(res)
-					_this.ctype = res.data.data
-						_this.attention(1)
-				
-				}
+			_this.$http.getWork({
+				openId:openId,
+			}).then(res => {
+				_this.ctype = res.data.data
+				_this.attention(1)
 			})
-		
 		},
 		methods:{
 			toOrder:function(e){

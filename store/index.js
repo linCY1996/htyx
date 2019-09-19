@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
 	state: {
-		baseurl: 'http://47.108.66.16:8088',
+		baseurl: 'https://www.mastervan.cn',
+		// baseurl: 'http://47.108.66.16:8088',
 		model:'',
 		windowHeight:'',
 		windowWidth:'',

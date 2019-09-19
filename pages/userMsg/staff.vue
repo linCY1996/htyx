@@ -105,7 +105,6 @@
 				<view class="setFlex title-base">
 					<view class="inputBorder uplicense">
 						<text v-if="!upvideo">+</text>
-						
 					</view>
 				</view>
 				<view class="setFlex title-base" style="width: 100%;position: relative;top:-178px;" v-on:tap="upVideo">
@@ -178,25 +177,18 @@
 				let openid=uni.getStorageSync('openid');
 				// console.log(openid)
 				let _this=this;
-				uni.request({
-					url:_this.$store.state.baseurl+'/careerType/getType',
-					data:{
-						openId:openid
-					},
-					header : {'content-type':'application/x-www-form-urlencoded'},
-					method:'GET',
-					success: function (res) {
-						// console.log(res.data.data)
-						let arr1=[];
-						let arr2=[];
-						let dataArr=res.data.data;
-						for(let i in dataArr){
-							arr1.push(dataArr[i].cname);
-							arr2.push(dataArr[i].cid)
-						}
-						_this.jobArr=arr1;
-						_this.jobId=arr2;
+				_this.$http.getWork({
+					openId:openid
+				}).then(res =>{
+					let arr1=[];
+					let arr2=[];
+					let dataArr=res.data.data;
+					for(let i in dataArr){
+						arr1.push(dataArr[i].cname);
+						arr2.push(dataArr[i].cid)
 					}
+					_this.jobArr=arr1;
+					_this.jobId=arr2;
 				})
 				return true;
 			}
@@ -334,11 +326,8 @@
 			},
 			upVideo:function(){
 				var _this = this;
-				// var childId = wx.getStorageSync("child_id");
-				// var token = wx.getStorageSync('token');
 				uni.chooseVideo({
 					sourceType: ['album', 'camera'],
-				
 					maxDuration: 10,
 					success: function (res) {
 					  // self.src = res.tempFilePath;
@@ -350,9 +339,6 @@
 					fail: function(res) {
 					    console.log(res)
 					},
-					complete:function(res){
-						console.log(res)
-					}
 				});
 			},
 			upImg:function(){
@@ -380,26 +366,18 @@
 			},
 			submitData:function(e){
 				let _this=this;
-
-				
 				let openid=uni.getStorageSync('openid');
-				//console.log(openid)
-				
-				
 				e.detail.value.address=this.city[0]+this.city[1]+this.city[2];				
 				e.detail.value.openId=openid;
 				e.detail.value.roleType=3;
-
 				e.detail.value.headUrl=this.avatar;
 				e.detail.value.sex=this.sexIndex;
 				e.detail.value.cid=this.jobId[this.jobIndex];
 				e.detail.value.age=e.detail.value.age;
-				
 				e.detail.value.height=e.detail.value.height;
 				e.detail.value.weight=e.detail.value.weight;
 				e.detail.value.bust=e.detail.value.bust;
 				e.detail.value.hipLine=e.detail.value.hipLine;
-
 				if(e.detail.value.address=='选择地址'||e.detail.value.userName==''||e.detail.value.age==''||e.detail.value.phone==''||e.detail.value.height==''||e.detail.value.weight==''||e.detail.value.bust==''||e.detail.value.hipLine==''||this.uplicense==false||this.upvideo==false||this.upimg==false){
 					uni.showModal({
 						title:'提示',
@@ -414,13 +392,7 @@
 				// 		})
 				// }
 				
-				//console.log(_this.License[0])
-				//console.log(e.detail.value)
 				uni.showLoading();
-				
-				// console.log(this.License);
-				// console.log(this.img);
-				// console.log(this.video)
 				console.log(e)
 				uni.request({
 					url:_this.$store.state.baseurl+'/user/insertUser',
@@ -428,9 +400,6 @@
 					method: 'POST',
 					header : {'content-type':'application/x-www-form-urlencoded'},
 					success: function (res) {
-						//console.log(res.data);
-										
-						
 						if(res.data.data==1){
 							console.log(_this.video)
 							uni.uploadFile({

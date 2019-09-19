@@ -30,7 +30,7 @@
 		},
 		onLoad() {
 			
-			let openId=uni.getStorageSync('openid');
+			let openId=uni.getStorageSync('openid'); 
 			let _this=this;
 			let userType=uni.getStorageSync('userType');
 			let t=setInterval(function(){
@@ -44,8 +44,7 @@
 				        "Content-Type": "application/x-www-form-urlencoded"
 				    },
 				    success: (res) => {
-				        //openId、或SessionKdy存储//隐藏loading
-				        //console.log(res.data.data)
+						console.log("==", res.data.data);
 						if(res.data.data=='审核通过'){
 							//console.log('123')
 							clearInterval(t)
@@ -59,15 +58,14 @@
 								})
 							}
 						}else if(res.data.data=='审核不通过'){
-							//console.log('456')
 							clearInterval(t)
-							// uni.reLaunch({
-							// 	url: '../login/index'
-							// })
-							
+							console.log("123");
+							uni.setStorageSync('openid', '')
+							uni.reLaunch({
+								url: '../login/index'
+							})
 						}else if(res.data.data=='还未审核'){
 							//console.log('789')
-						
 							//clearInterval(t)
 						}
 				    }

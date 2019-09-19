@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/login/main",
     "pages/login/index",
     "pages/userMsg/boss",
     "pages/userMsg/staff",
@@ -26,5 +27,5 @@
     "fr-loading": "/components/loading/loading",
     "my-header": "/components/header"
   },
-  "sitemapLocation": "sitemap45.json"
+  "sitemapLocation": "sitemap65.json"
 }

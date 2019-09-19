@@ -196,7 +196,7 @@
 				let openid=uni.getStorageSync('openid');
 				//console.log(openid)
 				
-				if(e.detail.value.address!=''&&e.detail.value.address!=undefined){
+				if(e.detail.value.address!='' && e.detail.value.address!=undefined){
 					e.detail.value.address=this.city[0]+this.city[1]+this.city[2]+e.detail.value.address;
 				}else{
 					e.detail.value.address=this.city[0]+this.city[1]+this.city[2];

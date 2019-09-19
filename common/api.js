@@ -1,4 +1,5 @@
-let host = 'http://47.108.66.16:8088' //体验服
+let host = 'https://www.mastervan.cn' //正式服
+// let host = 'http://47.108.66.16:8088' //体验服
 
 var httpRequest = {
 	//post请求 url：请求路径，请求header，params请求参数，app全局变量

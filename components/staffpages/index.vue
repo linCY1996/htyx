@@ -67,11 +67,11 @@
 					</view>
 					<scroll-view scroll-x style="margin: 10rpx 0">
 						<view style="width: 90%;margin: 0 auto;display: flex;flex-direction: row;">
-							<video :src="item" controls v-for="(item,index) in videoList" :key="index" style="width:45%;margin-right: 5%;height: 240rpx;border-radius: 10rpx;"></video>
+							<video :src="item" v-for="(item,index) in videoList" :key="index" controls style="z-index: 5;width:45%;margin-right: 5%;height: 240rpx;border-radius: 10rpx;">
+							</video>
 						</view>
 					</scroll-view>
 				</view>
-				
 			</view>
 
 			<view style="display: flex;padding-left: 5%;align-items: center;">
@@ -195,220 +195,91 @@
 		onReady() {
 			//用户信息
 			let openId = uni.getStorageSync('openid');
-			let _this = this;
-			uni.request({
-				url: 'https://www.mastervan.cn/user/getUserMessage',
-				data: {
-					openId: openId
-				},
-				method: 'POST',
-				header: {
-					'content-type': 'application/x-www-form-urlencoded'
-				},
-				success: function(res) {
-					console.log(res)
-					let h = res.data.data.partTimeMessage.height
-					let w = res.data.data.partTimeMessage.weight
-					_this.height = h
-					_this.width = w
-					uni.request({
-						url: 'https://www.mastervan.cn/user/findDetailUserMessage',
-						data: {
-							openId: openId,
-							userId: res.data.data.userId
-						},
-						method: 'POST',
-						header: {
-							'content-type': 'application/x-www-form-urlencoded'
-						},
-						success: function(res) {
-							console.log(res)
-							let picsList = res.data.data.photoUrlList
-							let videoList = []
-							videoList.push(res.data.data.videoUrl)
-							if (res.data.data.dolphinVideoUrl != null) {
-								videoList.push(res.data.data.dolphinVideoUrl)
-							}
-							if (res.data.data.dolphinPhotoList.length > 0) {
-								picsList = picsList.concat(res.dada.data.dolphinPhotoList)
-							}
-							_this.videoList = videoList,
-								_this.picsList = picsList
-							console.log(_this)
-						}
-					})
-				}
+			let that = this;
+			that.$http.getUserMsgs({
+				openId: openId
+			}).then(res => {
+				console.log("getUserMsgs=", res)
+				let h = res.data.data.partTimeMessage.height
+				let w = res.data.data.partTimeMessage.weight
+				that.height = h
+				that.width = w
+				that.$http.findDetailUserMsgs({
+					openId: openId,
+					userId: res.data.data.userId
+				}).then(res => {
+					// console.log("userdetailMsgs=", res)
+					let picsList = res.data.data.photoUrlList
+					let videoList = []
+					videoList.push(res.data.data.videoUrl)
+					if (res.data.data.dolphinVideoUrl != null) {
+						videoList.push(res.data.data.dolphinVideoUrl)
+					}
+					if (res.data.data.dolphinPhotoList.length > 0) {
+						picsList = picsList.concat(res.dada.data.dolphinPhotoList)
+					}
+					that.videoList = videoList
+					console.log("videoList", that.videoList);
+					that.picsList = picsList
+				})
 			})
-			uni.request({
-				url: _this.$store.state.baseurl + '/user/partTimeMessage',
-				data: {
-					openId: openId
-				},
-				method: 'POST',
-				header: {
-					'content-type': 'application/x-www-form-urlencoded'
-				},
-				success: function(res) {
-					_this.userMsg = res.data.data
-					console.log(res)
-					uni.setStorageSync('cid', res.data.data.cid)
-					//websocket
-					let cid = res.data.data.cid;
-					_this.cid = cid;
-					let set = setInterval(function() {
-						uni.request({
-							url: _this.$store.state.baseurl + '/order/findOrderList',
-							data: {
-								cid: cid,
-								openId: openId
-							},
-							method: 'POST',
-							header: {
-								'content-type': 'application/x-www-form-urlencoded'
-							},
-							success(res) {
-								//console.log(typeof res.data.data)
-								let oldSt = JSON.stringify(res.data.data);
+			that.$http.partTimeMsgs({
+				openId: openId
+			}).then(res => {
+				// console.log("userMsgs=", res)
+				that.userMsg = res.data.data
+				uni.setStorageSync('cid', res.data.data.cid)
+				//websocket
+				let cid = res.data.data.cid;
+				that.cid = cid;
+				let set = setInterval(function() {
+					that.$http.findOrderList({
+						cid: cid,
+						openId: openId
+					}).then(res => {
+						// console.log("订单列表=", res);
+						let oldSt = JSON.stringify(res.data.data);
+						let order = res.data.data;
+						that.$http.findOrderID({
+							openId: openId
+						}).then(res => {
+							// console.log("res=",res);
+							let arr3 = res.data.data;
+							let allOid = [];
+							for (let i in arr3) {
+								allOid.push(arr3[i].orderId)
+							}
+							// console.log("oid=", allOid)
 
-								let order = res.data.data;
-								uni.request({
-									url: _this.$store.state.baseurl + '/userOrder/findOrderId',
-									data: {
-										openId: openId
-									},
-									method: 'POST',
-									header: {
-										'content-type': 'application/x-www-form-urlencoded'
-									},
-									success: function(oidArr) {
-										//console.log(oidArr.data.data)
-										let arr3 = oidArr.data.data;
-										let allOid = [];
-										for (let i in arr3) {
-											allOid.push(arr3[i].orderId)
+							//去除已抢订单
+							function getArrEqual(arr1, arr2) {
+								let newArr = [];
+								for (let i = 0; i < arr2.length; i++) {
+									for (let j = 0; j < arr1.length; j++) {
+										if (arr1[j] === arr2[i].oid) {
+											arr2.splice(i, 1)
 										}
-										console.log(allOid)
-
-
-										//去除已抢订单
-										function getArrEqual(arr1, arr2) {
-											let newArr = [];
-											for (let i = 0; i < arr2.length; i++) {
-												for (let j = 0; j < arr1.length; j++) {
-													if (arr1[j] === arr2[i].oid) {
-														arr2.splice(i, 1)
-													}
-												}
-											}
-											return arr2;
-										}
-
-										let st = JSON.stringify(getArrEqual(allOid, order));
-
-										if (getArrEqual(allOid, order).length != 0) {
-											clearInterval(set);
-
-											uni.navigateTo({
-												url: '/pages/competed/index?st=' + st
-											})
-										}
-									},
-									fail() {
-
 									}
+								}
+								return arr2;
+							}
+							let st = JSON.stringify(getArrEqual(allOid, order));
+							if (getArrEqual(allOid, order).length != 0) {
+								clearInterval(set);
+								uni.navigateTo({
+									url: '/pages/competed/index?st=' + st
 								})
 							}
 						})
-					}, 15000)
-
-
-					// 	uni.connectSocket({
-					// 	  url: 'wss://www.mastervan.cn/orderSocket/'+cid
-					// 	});
-					// 	
-					// 	uni.onSocketOpen(function (res) {
-					// 	  console.log('WebSocket连接已打开！');
-					// 	  //console.log(res)
-					// 	});
-					// 	
-					// 	let userType=uni.getStorageSync('userType');
-					// 	uni.onSocketMessage(function (res) {
-					// 	  let oldSt=res.data;
-					// 	  let st=JSON.parse(res.data);
-					// 	  if(st!=null){
-					// 		  uni.closeSocket();
-					// 		  let old=uni.getStorageSync('oid');
-					// 		  if(st.oid!=old){
-					// 			  uni.navigateTo({
-					// 			  	url:'/pages/competed/index?st='+oldSt
-					// 			  })
-					// 		  }else{
-					// 		  	return false 
-					// 		  }
-					// 	  }else{
-					// 		  uni.closeSocket();
-					// 	  }
-					// 	});
-					// 	
-					// 	//60s执行一次
-					// 	function getData(){
-					// 		//websocket
-					// 		let cid=res.data.data.cid;
-					// 		uni.connectSocket({
-					// 		  url: 'wss://www.mastervan.cn/orderSocket/'+cid
-					// 		});
-					// 		
-					// 		uni.onSocketOpen(function (res) {
-					// 		  console.log('WebSocket连接已打开！');
-					// 		  //console.log(res)
-					// 		});
-					// 		
-					// 		let userType=uni.getStorageSync('userType');
-					// 		
-					// 		uni.onSocketMessage(function (res) {
-					// 		  //console.log(res.data);
-					// 		  let oldSt=res.data;
-					// 		  let st=JSON.parse(res.data);
-					// 		  if(st!=null){
-					// 			  uni.closeSocket();
-					// 			  let old=uni.getStorageSync('oid');
-					// 			  if(st.oid!=old){
-					// 				  uni.navigateTo({
-					// 				  	url:'/pages/competed/index?st='+oldSt
-					// 				  })
-					// 				  clearInterval(set)
-					// 			  }else{
-					// 				 return false
-					// 			  }
-					// 		  }else{
-					// 			  uni.closeSocket();
-					// 		  }
-					// 		});
-					// 	}
-					// 	let set=setInterval(getData,1000*60);
-					// 	
-				}
+					})
+				}, 15000)
 			})
 			//审核中
-			uni.request({
-				url: _this.$store.state.baseurl + '/order/findOrderMessage',
-				data: {
-					openId: openId,
-					orderStart: 3
-				},
-				method: 'POST',
-				header: {
-					'content-type': 'application/x-www-form-urlencoded'
-				},
-				success: function(res) {
-					console.log(res)
-					//let cart=res.data.data;
-					//_this.$store.commit('setCart',cart);
-					//console.log(_this.$store.state.cart)
-					// console.log(res.data.data)
-					_this.notStart = res.data.data
-					//console.log( _this.notStart)
-				}
+			that.$http.findOrderMsgs({
+				openId: openId,
+				orderStart: 3
+			}).then(res => {
+				that.notStart = res.data.data
 			})
 		},
 		computed: {
@@ -421,6 +292,11 @@
 			}
 		},
 		methods: {
+			// 视频进入全屏显示
+			findDetailUserMsg(e) {
+				console.log("video=",e);
+				console.log("123");
+			},
 			// 请求事件
 			isRequest() {
 				return new Promise((resolve, reject) => {
@@ -443,64 +319,28 @@
 
 				if (index == 1) {
 					//进行中
-					uni.request({
-						url: _this.$store.state.baseurl + '/order/findOrderMessage',
-						data: {
-							openId: openId,
-							orderStart: 2
-						},
-						method: 'POST',
-						header: {
-							'content-type': 'application/x-www-form-urlencoded'
-						},
-						success: function(res) {
-							//let cart=res.data.data;
-							//_this.$store.commit('setCart',cart);
-							//console.log(_this.$store.state.cart)
-							//console.log(res.data.data)
-							_this.start = res.data.data
-						}
+					_this.$http.findOrderMsgs({
+						openId: openId,
+						orderStart: 2
+					}).then(res => {
+						_this.start = res.data.data
 					})
 				} else if (index == 2) {
 					//已完成
-					uni.request({
-						url: _this.$store.state.baseurl + '/order/findOrderMessage',
-						data: {
-							openId: openId,
-							orderStart: 4
-						},
-						method: 'POST',
-						header: {
-							'content-type': 'application/x-www-form-urlencoded'
-						},
-						success: function(res) {
-							//let cart=res.data.data;
-							//_this.$store.commit('setCart',cart);
-							//console.log(_this.$store.state.cart)
-							//console.log(res.data.data)
-							_this.end = res.data.data
-						}
+					_this.$http.findOrderMsgs({
+						openId: openId,
+						orderStart: 4
+					}).then(res => {
+						_this.end = res.data.data
 					})
+
 				} else if (index == 0) {
 					//审核中
-					uni.request({
-						url: _this.$store.state.baseurl + '/order/findOrderMessage',
-						data: {
-							openId: openId,
-							orderStart: 3
-						},
-						method: 'POST',
-						header: {
-							'content-type': 'application/x-www-form-urlencoded'
-						},
-						success: function(res) {
-							//let cart=res.data.data;
-							//_this.$store.commit('setCart',cart);
-							//console.log(_this.$store.state.cart)
-							// console.log(res.data.data)
-							_this.notStart = res.data.data
-							//console.log( _this.notStart)
-						}
+					_this.$http.findOrderMsgs({
+						openId: openId,
+						orderStart: 3
+					}).then(res => {
+						_this.notStart = res.data.data
 					})
 				}
 			},
@@ -552,7 +392,39 @@
 					})
 					return false
 				}
-				console.log(e.detail.value)
+				// _this.$http.createRecode({
+				// 	data: e.detail.value
+				// }).then(res => {
+				// 	console.log(res.data.data)
+				// 	var uuid = res.data.data
+				// 	for (var i = 0; i <= _this.aimg.length; i++) {
+				// 		uni.uploadFile({
+				// 			url: _this.$store.state.baseurl + '/record/fileUpload',
+				// 			filePath: _this.aimg[i],
+				// 			name: 'file',
+				// 			formData: {
+				// 				uuid: uuid,
+				// 				openId: e.detail.value.openId
+				// 			},
+				// 			success: (res) => {
+				// 				console.log(res)
+				// 				_this.$store.commit('setQiangSt', false)
+				// 				setTimeout(function() {
+				// 					_this.uplv = false
+				// 					uni.reLaunch({
+				// 						url: '/pages/index01/index'
+				// 					})
+				// 				}, 1000)
+				// 			},
+				// 			fail() {
+				// 				uni.showToast({
+				// 					title: '上传失败'
+				// 				})
+				// 			}
+				// 		});
+				// 	}
+				// 	_this.notStart = res.data.data
+				// })
 				uni.request({
 					url: _this.$store.state.baseurl + '/record/create',
 					data: e.detail.value,

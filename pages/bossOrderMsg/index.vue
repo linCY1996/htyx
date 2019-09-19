@@ -115,20 +115,12 @@
 			
 			let openId=uni.getStorageSync('openid');
 			let _this=this;
-			uni.request({
-				url:_this.$store.state.baseurl+'/careerType/getType',
-				data:{
-					openId:openId,
-				},
-				method:'GET',
-				header : {'content-type':'application/x-www-form-urlencoded'},
-				success:function(res){
-					console.log(res)
-					_this.ctype = res.data.data
-						_this.getOrderLsit(1)
-				}
+			_this.$http.getWork({
+				openId:openId,
+			}).then(res => {
+				_this.ctype = res.data.data
+				_this.getOrderLsit(1)
 			})
-	
 		},
 		computed: {
 			isModel:function(){
