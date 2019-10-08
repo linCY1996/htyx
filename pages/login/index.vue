@@ -6,6 +6,9 @@
 				<button class='bottom' style="background: rgba(183, 189, 190, 0.4);font-family: Source Han Sans CN;" type='primary' open-type="getUserInfo" @getuserinfo="getUserInfo" withCredentials="true" lang="zh_CN">
 				    授权登录
 				</button>
+				<view class="msgs">
+					*本款小程序将用户和兼职同时融合，用户需要先授权登录，选择不同的角色，确定好不同的身份后，注册信息审核通过之后，用户即可在线下单，兼职人员即可在线接单。*
+				</view>
 			</image>
             <!-- <view>
                 <view class='header'>
@@ -128,7 +131,7 @@
 
     .bottom {
 		position: absolute;
-		bottom: 30rpx;
+		bottom: 160rpx;
 		left: 50%;
 		transform: translateX(-50%);
         border-radius: 80rpx;
@@ -139,4 +142,18 @@
 		background: #333333;
 		z-index: 10;
     }
+	.msgs {
+		position: absolute;
+		bottom: 15rpx;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 570rpx;
+		height: auto;
+		font-size: 24rpx;
+		font-weight: 500;
+		font-family:Source Han Sans CN;
+		line-height: 32rpx;
+		text-align: center;
+		color: #F8F8F8;
+	}
 </style>

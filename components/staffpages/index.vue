@@ -308,7 +308,7 @@
 						resolve()
 					}, 1000)
 				})
-			},
+			}, 
 			// 导航栏点击
 			navClick(index) {
 				this.currentTab = index //设置swiper的第几页

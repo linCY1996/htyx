@@ -171,8 +171,9 @@ __webpack_require__.r(__webpack_exports__);
       jobId: '',
       cIndex: 1,
       inputContent: '',
-      cid: null };
-
+      cid: null,
+      ContentMsg: '' //搜索
+    };
   },
   watch: {
     masonryList: function masonryList(newVal, oldVal) {
@@ -256,6 +257,7 @@ __webpack_require__.r(__webpack_exports__);
         page: _this.isPage,
         cid: cIndex }).
       then(function (res) {
+        console.log("res", res);
         var list = res.data.data.list;
         if (list != undefined) {
           _this.dataList = list;
@@ -318,7 +320,6 @@ __webpack_require__.r(__webpack_exports__);
         cid: 1 }).
       then(function (res) {
         var list = res.data.data.list;
-        //console.log(list)
         if (list != undefined) {
           for (var i in list) {
             _this.dataList.push(list[i]);
@@ -326,14 +327,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    getContent: function getContent(e) {
-      //console.log(e.detail.value)
-      this.inputContent = e.detail.value;
-    },
     toSearch: function toSearch() {
       var _this = this;
+      // console.log("Content", _this.ContentMsg);
       uni.navigateTo({
-        url: '/pages/search/index?content=' + _this.inputContent });
+        url: '/pages/search/index?content=' + _this.ContentMsg });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

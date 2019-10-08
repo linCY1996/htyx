@@ -1,4 +1,5 @@
-let host = 'http://47.108.66.16:8088' //演示服
+let host = 'https://www.mastervan.cn' //正式服
+// let host = 'http://47.108.66.16:8088' //体验服
 
 function getDomain() {
 	return host;

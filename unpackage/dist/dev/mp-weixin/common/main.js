@@ -68,9 +68,42 @@ __webpack_require__.r(__webpack_exports__);
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _default =
 {
   onLaunch: function onLaunch() {
-    // console.log('App Launch');
-    // let _this=this;
-    // let openid=uni.getStorageSync('openid')
+    // 监听网络状态变化
+    uni.onNetworkStatusChange(function (res) {
+      console.log("resContent=", res);
+      if (res.isConnected == false) {
+        uni.showToast({
+          title: '网络异常，请检查网络',
+          icon: 'none',
+          duration: 3000 });
+
+      }
+    });
+    var updateManager = uni.getUpdateManager();
+    updateManager.onCheckForUpdate(function (res) {
+      // 请求完新版本信息的回调
+      console.log("版本", res.hasUpdate);
+    });
+    updateManager.onUpdateReady(function (res) {
+      uni.showModal({
+        title: '更新提示',
+        content: '新版本已经准备好，是否重启应用？',
+        success: function success(res) {
+          if (res.confirm) {
+            // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+            updateManager.applyUpdate();
+          }
+        } });
+
+    });
+    updateManager.onUpdateFailed(function (res) {
+      console.log("新版本下载失败");
+      uni.showModal({
+        title: '新版本下载失败',
+        content: '请检查自己的网络是否正常',
+        success: function success(res) {} });
+
+    });
   },
   onShow: function onShow() {
     // console.log('App Show');

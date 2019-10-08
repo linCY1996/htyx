@@ -9,9 +9,9 @@
 		</view>
 		<view class="contentArea" style="position: absolute;top:0;color: white;z-index: 2000">
 			<view class="content">
-				<swiper :style="{'height':isZ}" style="width: 80%;padding-top: 120px;margin: 0 auto;z-index: 2000;" :indicator-dots="false" :autoplay="false" @change="getThis">
+				<swiper style="width: 80%;margin: 154rpx auto 0 auto;z-index: 2000;height: 950rpx;" :indicator-dots="false" :autoplay="false" @change="getThis">
 					<swiper-item v-for="(item,index) in isSt" :key='index' v-if="item!=''">
-						<view style="height: 400px;overflow-y: scroll;">
+						<view style="overflow-y: scroll;">
 							<view style="padding:10px;margin:0 auto;text-align:center">
 								<view class='contentTitle'>活动名称</view>
 								<view style="font-size:20px;margin-top:8px;color: #F6522F;font-weight: bold;">{{item.activityName}}</view>
@@ -29,7 +29,7 @@
 							
 							<view style="padding:10px;margin:0 auto;text-align:center;">
 								<view class='contentTitle'>活动备注</view>
-								<view style="font-size:20px;margin-top:8px;color: #F6522F;font-weight: bold;">{{item.orderRemark}}</view>
+								<view style="font-size:26rpx;margin-top:8px;color: #F6522F;font-weight: bold;">{{item.orderRemark}}</view>
 							</view>
 							
 							<view style="padding:10px;margin:0 auto;text-align:center">

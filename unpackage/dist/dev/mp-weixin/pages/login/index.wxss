@@ -27,7 +27,7 @@
 }
 .bottom {
 		position: absolute;
-		bottom: 30rpx;
+		bottom: 160rpx;
 		left: 50%;
 		-webkit-transform: translateX(-50%);
 		    -ms-transform: translateX(-50%);
@@ -39,5 +39,21 @@
 		line-height: 86rpx;
 		background: #333333;
 		z-index: 10;
+}
+.msgs {
+		position: absolute;
+		bottom: 15rpx;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		    -ms-transform: translateX(-50%);
+		        transform: translateX(-50%);
+		width: 570rpx;
+		height: auto;
+		font-size: 24rpx;
+		font-weight: 500;
+		font-family:Source Han Sans CN;
+		line-height: 32rpx;
+		text-align: center;
+		color: #F8F8F8;
 }
 

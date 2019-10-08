@@ -13,7 +13,7 @@
 					<view class='searchBox999'>
 						<image src='https://www.mastervan.cn/static/project/dolphin/static/icon-search.png' class='search999'></image>
 					</view>
-					<input class='input999' placeholder="输入关键词" @input.stop='getContent' maxlength="100"></input>
+					<input class='input999' placeholder="输入关键词" v-model="ContentMsg" maxlength="100"></input>
 					<text style="color: #999;font-size: 14px" v-on:tap.stop="toSearch">搜索</text>
 				</view>
 				<!-- 导航栏 -->
@@ -64,7 +64,8 @@
 				jobId:'',
 				cIndex:1,
 				inputContent:'',
-				cid: null
+				cid: null,
+				ContentMsg:'', //搜索
 			}
 		},
 		watch: {
@@ -149,6 +150,7 @@
 					page:_this.isPage,
 					cid:cIndex
 				}).then(res => {
+					console.log("res", res);
 					let list=res.data.data.list;
 					if(list!=undefined){
 						_this.dataList=list;
@@ -211,7 +213,6 @@
 					cid:1
 				}).then(res => {
 					let list=res.data.data.list;
-					//console.log(list)
 					if(list!=undefined){
 						for (let i in list) {
 							_this.dataList.push(list[i]);
@@ -219,14 +220,11 @@
 					}
 				})
 			},
-			getContent:function(e){
-				//console.log(e.detail.value)
-				this.inputContent=e.detail.value
-			},
 			toSearch:function(){
 				let _this=this;
+				// console.log("Content", _this.ContentMsg);
 				uni.navigateTo({
-					url:'/pages/search/index?content='+_this.inputContent
+					url:'/pages/search/index?content='+_this.ContentMsg
 				})
 			}
 		}
