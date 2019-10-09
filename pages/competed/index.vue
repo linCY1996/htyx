@@ -9,7 +9,7 @@
 		</view>
 		<view class="contentArea" style="position: absolute;top:0;color: white;z-index: 2000">
 			<view class="content">
-				<swiper style="width: 80%;margin: 154rpx auto 0 auto;z-index: 2000;height: 950rpx;" :indicator-dots="false" :autoplay="false" @change="getThis">
+				<swiper style="width: 80%;margin: 154rpx auto 0 auto;z-index: 2000;height: 950rpx;" :indicator-dots="true" indicator-active-color="#fff" :autoplay="false" @change="getThis">
 					<swiper-item v-for="(item,index) in isSt" :key='index' v-if="item!=''">
 						<view style="overflow-y: scroll;">
 							<view style="padding:10px;margin:0 auto;text-align:center">

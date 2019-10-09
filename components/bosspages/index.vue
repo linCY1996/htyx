@@ -26,7 +26,6 @@
 			<swiper :style="{'height':ismH+'px'}" style="width: 98%;margin: 0 auto;position: fixed;margin-left: 1%;" :current="currentTab" @change.stop="swiperTab">
 				<swiper-item v-for="(item,index) in jobId" :key="index" style="margin-top: 170px;">
 					<scroll-view :style="{'height':contentH+'px'}" style="width: 110%;" scroll-y="true" @scrolltolower.stop="lower1">
-					
 						<view style="width: 90.6%;">
 							<content :list="dataList"></content>
 						</view>

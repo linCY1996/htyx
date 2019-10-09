@@ -6,7 +6,7 @@
 					<image class="imgBase"
 						:src="item.photoList[0]" 
 						:mode="mode"
-						style="width: 100%;"
+						style="width: 100%;" 
 						lazy-load
 					></image>
 					
@@ -191,9 +191,7 @@ export default {
 							for(let i in getData){
 								guanList.push(getData[i].byArUserId)
 							}
-							//console.log(guanList)
 							_this.guan=guanList;
-							//console.log(_this.guan)
 						}
 					})
 					

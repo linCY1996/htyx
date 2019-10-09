@@ -298,9 +298,7 @@ var _default =
               for (var i in getData) {
                 guanList.push(getData[i].byArUserId);
               }
-              //console.log(guanList)
               _this.guan = guanList;
-              //console.log(_this.guan)
             } });
 
 

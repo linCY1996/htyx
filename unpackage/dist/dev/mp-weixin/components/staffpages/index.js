@@ -306,7 +306,6 @@ var _default =
     that.$http.getUserMsgs({
       openId: openId }).
     then(function (res) {
-      console.log("getUserMsgs=", res);
       var h = res.data.data.partTimeMessage.height;
       var w = res.data.data.partTimeMessage.weight;
       that.height = h;
@@ -350,14 +349,11 @@ var _default =
           that.$http.findOrderID({
             openId: openId }).
           then(function (res) {
-            // console.log("res=",res);
             var arr3 = res.data.data;
             var allOid = [];
             for (var i in arr3) {
               allOid.push(arr3[i].orderId);
             }
-            // console.log("oid=", allOid)
-
             //去除已抢订单
             function getArrEqual(arr1, arr2) {
               var newArr = [];
@@ -379,7 +375,7 @@ var _default =
             }
           });
         });
-      }, 15000);
+      }, 3000);
     });
     //审核中
     that.$http.findOrderMsgs({
@@ -540,8 +536,6 @@ var _default =
           'content-type': 'application/x-www-form-urlencoded' },
 
         success: function success(res) {
-          console.log(res);
-          console.log(res.data.data);
           var uuid = res.data.data;
           for (var i = 0; i <= _this.aimg.length; i++) {
             uni.uploadFile({
@@ -569,19 +563,9 @@ var _default =
               } });
 
           }
-
-          //let cart=res.data.data;
-          //_this.$store.commit('setCart',cart);
-          //console.log(_this.$store.state.cart)
-          // console.log(res.data.data)
           _this.notStart = res.data.data;
           //console.log( _this.notStart)
         } });
-
-
-
-
-
 
     },
     bindDateChange: function bindDateChange(e) {
