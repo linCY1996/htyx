@@ -78,7 +78,6 @@
 								name:that.nickName,
 								pic:that.avatarUrl
 							}).then(res =>{
-								console.log("userMsgs", res.data.data);
 								uni.hideLoading();
 								var msgs = res.data.data
 								if(msgs.wxHeadPictureUrl!=null&&msgs.wxHeadPictureUrl!=''){

@@ -145,12 +145,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
-
-
-
 {
   components: {
     refresh: refresh,
@@ -250,6 +244,7 @@ __webpack_require__.r(__webpack_exports__);
       var openid = uni.getStorageSync('openid');
       var _this = this;
       var cIndex = this.jobId[index];
+      console.log("cIndex", cIndex);
       _this.$store.commit('changeCid', cIndex);
       _this.cIndex = cIndex;
       _this.$http.getList({
@@ -268,7 +263,6 @@ __webpack_require__.r(__webpack_exports__);
     // swiper 滑动
     swiperTab: function swiperTab(e) {
       //console.log(e)
-
       var index = e.detail.current;
       var cIndex = this.jobId[index];
       this.cIndex = cIndex;
@@ -295,7 +289,6 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       });
-
     },
     initData: function initData() {
       var openid = uni.getStorageSync('openid');

@@ -343,36 +343,29 @@ var _default =
           cid: cid,
           openId: openId }).
         then(function (res) {
-          // console.log("订单列表=", res);
           var oldSt = JSON.stringify(res.data.data);
           var order = res.data.data;
+          console.log("订单列表=", order);
           that.$http.findOrderID({
             openId: openId }).
           then(function (res) {
+            console.log("dingOrder", res);
             var arr3 = res.data.data;
             var allOid = [];
             for (var i in arr3) {
               allOid.push(arr3[i].orderId);
             }
-            //去除已抢订单
-            function getArrEqual(arr1, arr2) {
-              var newArr = [];
-              for (var _i = 0; _i < arr2.length; _i++) {
-                for (var j = 0; j < arr1.length; j++) {
-                  if (arr1[j] === arr2[_i].oid) {
-                    arr2.splice(_i, 1);
-                  }
-                }
-              }
-              return arr2;
-            }
-            var st = JSON.stringify(getArrEqual(allOid, order));
-            if (getArrEqual(allOid, order).length != 0) {
-              clearInterval(set);
-              uni.navigateTo({
-                url: '/pages/competed/index?st=' + st });
-
-            }
+            // 去除已抢订单
+            console.log("order==", order);
+            var st = JSON.stringify(that.getArrEqual(allOid, order));
+            // console.log("st", st);
+            // console.log("==", that.getArrEqual(allOid, order));
+            // if (that.getArrEqual(allOid, order).length != 0) {
+            // 	clearInterval(set);
+            // 	uni.navigateTo({
+            // 		url: '/pages/competed/index?st=' + st
+            // 	})
+            // }
           });
         });
       }, 3000);
@@ -399,6 +392,17 @@ var _default =
     findDetailUserMsg: function findDetailUserMsg(e) {
       console.log("video=", e);
       console.log("123");
+    },
+    // 去除已抢订单
+    getArrEqual: function getArrEqual(arr1, arr2) {
+      for (var i = 0; i < arr2.length; i++) {
+        for (var j = 0; j < arr1.length; j++) {
+          if (arr2[i].oid == arr1[j]) {
+            arr2.splice(i, 1);
+          }
+        }
+      }
+      return arr2;
     },
     // 请求事件
     isRequest: function isRequest() {
@@ -495,39 +499,7 @@ var _default =
 
         return false;
       }
-      // _this.$http.createRecode({
-      // 	data: e.detail.value
-      // }).then(res => {
-      // 	console.log(res.data.data)
-      // 	var uuid = res.data.data
-      // 	for (var i = 0; i <= _this.aimg.length; i++) {
-      // 		uni.uploadFile({
-      // 			url: _this.$store.state.baseurl + '/record/fileUpload',
-      // 			filePath: _this.aimg[i],
-      // 			name: 'file',
-      // 			formData: {
-      // 				uuid: uuid,
-      // 				openId: e.detail.value.openId
-      // 			},
-      // 			success: (res) => {
-      // 				console.log(res)
-      // 				_this.$store.commit('setQiangSt', false)
-      // 				setTimeout(function() {
-      // 					_this.uplv = false
-      // 					uni.reLaunch({
-      // 						url: '/pages/index01/index'
-      // 					})
-      // 				}, 1000)
-      // 			},
-      // 			fail() {
-      // 				uni.showToast({
-      // 					title: '上传失败'
-      // 				})
-      // 			}
-      // 		});
-      // 	}
-      // 	_this.notStart = res.data.data
-      // })
+
       uni.request({
         url: _this.$store.state.baseurl + '/record/create',
         data: e.detail.value,
@@ -588,12 +560,21 @@ var _default =
     },
     callMe: function callMe() {
       uni.makePhoneCall({
-        phoneNumber: '18808059879' });
+        phoneNumber: '18628188261' });
 
     },
     orderMsg: function orderMsg(oid) {
       uni.navigateTo({
         url: '/pages/staffOrderMsg/index?oid=' + oid });
+
+    },
+    // 预览图片
+    preivewImgs: function preivewImgs(res) {
+      console.log("res", res);
+      var Imgsindex = res.currentTarget.id;
+      uni.previewImage({
+        urls: this.picsList,
+        current: Imgsindex });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

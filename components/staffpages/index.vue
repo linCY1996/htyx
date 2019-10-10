@@ -56,7 +56,7 @@
 					<scroll-view scroll-x style="margin: 10rpx 0">
 						<view style="width: 90%; margin: 0 auto;display: flex;flex-direction: row;">
 							<image :src="item" mode="" v-for="(item,index) in picsList" :key="index" style="width:30%;margin-right: 3.3%;border-radius: 10rpx;"
-							 mode="widthFix"></image>
+							 mode="widthFix" @tap="preivewImgs" :id="index"></image>
 						</view>
 					</scroll-view>
 				</view>
@@ -229,43 +229,36 @@
 				that.userMsg = res.data.data
 				uni.setStorageSync('cid', res.data.data.cid)
 				//websocket
-				let cid = res.data.data.cid;
+				var cid = res.data.data.cid;
 				that.cid = cid;
-				let set = setInterval(function() {
+				var set = setInterval(function() {
 					that.$http.findOrderList({
 						cid: cid,
 						openId: openId
 					}).then(res => {
-						// console.log("订单列表=", res);
-						let oldSt = JSON.stringify(res.data.data);
-						let order = res.data.data;
+						var oldSt = JSON.stringify(res.data.data);
+						var order = res.data.data;
+						console.log("订单列表=", order);
 						that.$http.findOrderID({
 							openId: openId
 						}).then(res => {
-							let arr3 = res.data.data;
-							let allOid = [];
+							console.log("dingOrder", res);
+							var arr3 = res.data.data;
+							var allOid = [];
 							for (let i in arr3) {
 								allOid.push(arr3[i].orderId)
 							}
-							//去除已抢订单
-							function getArrEqual(arr1, arr2) {
-								let newArr = [];
-								for (let i = 0; i < arr2.length; i++) {
-									for (let j = 0; j < arr1.length; j++) {
-										if (arr1[j] === arr2[i].oid) {
-											arr2.splice(i, 1)
-										}
-									}
-								}
-								return arr2;
-							}
-							let st = JSON.stringify(getArrEqual(allOid, order));
-							if (getArrEqual(allOid, order).length != 0) {
-								clearInterval(set);
-								uni.navigateTo({
-									url: '/pages/competed/index?st=' + st
-								})
-							}
+							// 去除已抢订单
+							console.log("order==", order);
+							let st = JSON.stringify(that.getArrEqual(allOid, order));
+							// console.log("st", st);
+							// console.log("==", that.getArrEqual(allOid, order));
+							// if (that.getArrEqual(allOid, order).length != 0) {
+							// 	clearInterval(set);
+							// 	uni.navigateTo({
+							// 		url: '/pages/competed/index?st=' + st
+							// 	})
+							// }
 						})
 					})
 				}, 3000)
@@ -292,6 +285,17 @@
 			findDetailUserMsg(e) {
 				console.log("video=",e);
 				console.log("123");
+			},
+			// 去除已抢订单
+			getArrEqual(arr1, arr2) {
+				for (let i = 0; i < arr2.length; i++) {
+					for (let j = 0; j < arr1.length; j++) {
+						if(arr2[i].oid == arr1[j]) {
+							arr2.splice(i, 1)
+						}
+					}
+				}
+				return arr2;
 			},
 			// 请求事件
 			isRequest() {
@@ -388,39 +392,7 @@
 					})
 					return false
 				}
-				// _this.$http.createRecode({
-				// 	data: e.detail.value
-				// }).then(res => {
-				// 	console.log(res.data.data)
-				// 	var uuid = res.data.data
-				// 	for (var i = 0; i <= _this.aimg.length; i++) {
-				// 		uni.uploadFile({
-				// 			url: _this.$store.state.baseurl + '/record/fileUpload',
-				// 			filePath: _this.aimg[i],
-				// 			name: 'file',
-				// 			formData: {
-				// 				uuid: uuid,
-				// 				openId: e.detail.value.openId
-				// 			},
-				// 			success: (res) => {
-				// 				console.log(res)
-				// 				_this.$store.commit('setQiangSt', false)
-				// 				setTimeout(function() {
-				// 					_this.uplv = false
-				// 					uni.reLaunch({
-				// 						url: '/pages/index01/index'
-				// 					})
-				// 				}, 1000)
-				// 			},
-				// 			fail() {
-				// 				uni.showToast({
-				// 					title: '上传失败'
-				// 				})
-				// 			}
-				// 		});
-				// 	}
-				// 	_this.notStart = res.data.data
-				// })
+				
 				uni.request({
 					url: _this.$store.state.baseurl + '/record/create',
 					data: e.detail.value,
@@ -481,12 +453,21 @@
 			},
 			callMe: function() {
 				uni.makePhoneCall({
-					phoneNumber: '18808059879'
+					phoneNumber: '18628188261'
 				});
 			},
 			orderMsg: function(oid) {
 				uni.navigateTo({
 					url: '/pages/staffOrderMsg/index?oid=' + oid
+				})
+			},
+			// 预览图片
+			preivewImgs(res) {
+				console.log("res", res);
+				let Imgsindex = res.currentTarget.id;  
+				uni.previewImage({
+					urls:this.picsList,
+					current:Imgsindex
 				})
 			}
 		}

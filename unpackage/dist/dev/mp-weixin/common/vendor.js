@@ -1667,8 +1667,8 @@ _vue.default.use(_vuex.default);
 
 var store = new _vuex.default.Store({
   state: {
-    baseurl: 'https://www.mastervan.cn',
-    // baseurl: 'http://47.108.66.16:8088',
+    // baseurl: 'https://www.mastervan.cn',
+    baseurl: 'http://47.108.66.16:8088',
     model: '',
     windowHeight: '',
     windowWidth: '',
@@ -2896,8 +2896,8 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var host = 'https://www.mastervan.cn'; //正式服
-// let host = 'http://47.108.66.16:8088' //体验服
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; // let host = 'https://www.mastervan.cn' //正式服
+var host = 'http://47.108.66.16:8088'; //体验服
 
 var httpRequest = {
   //post请求 url：请求路径，请求header，params请求参数，app全局变量

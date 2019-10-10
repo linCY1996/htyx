@@ -2,12 +2,10 @@
 	<view class="baseSty" :style="{'height':isBgH+'px'}">
 		<view class="container999" @touchstart="refreshStart" @touchmove="refreshMove" @touchend.self="refreshEnd">
 			<refresh ref="refresh" :isRequest="isRequest" :cid="cIndex"></refresh>
-	
 			<view class='nav' :class="isModel=='iPhone X'?'paddingTop02':'paddingTop01'">
 				<view class="title-sty">
 					<view>海豚美芽</view>
 				</view>
-				
 				<!-- 搜索 -->
 				<view class='searchInput999'>
 					<view class='searchBox999'>
@@ -22,7 +20,6 @@
 				  <view style="width: 80px; height: 44px; display: inline-block;text-align: center;line-height: 48px;" v-for="(item,index) in jobArr" :key="index" class="navTabItem" :class="index==navIndex?'navSelect':''" v-on:tap.stop='navClick(index)'>{{item}}</view>
 				</scroll-view>
 			</view>
-	<!-- 			<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" > -->
 			<swiper :style="{'height':ismH+'px'}" style="width: 98%;margin: 0 auto;position: fixed;margin-left: 1%;" :current="currentTab" @change.stop="swiperTab">
 				<swiper-item v-for="(item,index) in jobId" :key="index" style="margin-top: 170px;">
 					<scroll-view :style="{'height':contentH+'px'}" style="width: 110%;" scroll-y="true" @scrolltolower.stop="lower1">
@@ -32,9 +29,7 @@
 					</scroll-view>
 				</swiper-item> 
 			</swiper>
-	<!-- 		</mescroll-uni> -->
 		</view>
-	
 	</view>
 	
 </template>
@@ -142,6 +137,7 @@
 				let openid=uni.getStorageSync('openid');
 				let _this=this;
 				let cIndex=this.jobId[index];
+				console.log("cIndex", cIndex);
 				_this.$store.commit('changeCid',cIndex)
 				_this.cIndex=cIndex;
 				_this.$http.getList({
@@ -160,7 +156,6 @@
 			// swiper 滑动
 			swiperTab: function(e) {
 				//console.log(e)
-		
 				var index = e.detail.current
 				let cIndex=this.jobId[index];
 				this.cIndex=cIndex;
@@ -187,7 +182,6 @@
 						}
 					}
 				})
-				
 			},
 			initData:function(){
 				let openid=uni.getStorageSync('openid');

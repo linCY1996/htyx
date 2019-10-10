@@ -506,8 +506,9 @@
 				}
 			},
 			showTel:function(){
+				console.log("here");
 				uni.makePhoneCall({
-					phoneNumber: '18808059879' //仅为示例
+					phoneNumber: '18628188261' //仅为示例
 				});
 			},
 			toOrder:function(e){
