@@ -25,4 +25,16 @@
 .ctrlSty{
 	margin-top: 30px;
 }
+.NavMsg {
+	position: relative;
+}
+.showPrice {
+	position: absolute;
+	right: 60rpx;
+	bottom: 37rpx;
+	width: 120rpx;
+	height: 30rpx;
+	line-height: 30rpx;
+	text-align: right;
+}
 

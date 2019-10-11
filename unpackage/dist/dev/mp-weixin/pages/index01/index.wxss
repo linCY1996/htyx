@@ -26,6 +26,17 @@
 	background-size: cover;
 	z-index: 998;
 }
+.Tops {
+	position: relative;
+}
+.TopPrice {
+	position: absolute;
+	bottom: 0rpx;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	    -ms-transform: translateX(-50%);
+	        transform: translateX(-50%);
+}
 .title-sty {
 	font-size: 18px;
 	font-weight: 600;
@@ -37,9 +48,8 @@
 }
 .baseSty {
 	width: 100%;
-	overflow-x: hidden;
-	overflow-y: hidden;
-	font-family: 'Alibaba PuHuiTi'
+	font-family: 'Alibaba PuHuiTi';
+	height: auto;
 }
 .baseSty::-webkit-scrollbar {
 	display: none;

@@ -8,7 +8,7 @@
 			</view>
 		</view>
 		
-		<view style="width: 100%;height: 200px;background: url(https://www.mastervan.cn/static/project/dolphin/static/images/背景06.png) no-repeat;background-size: cover;">
+		<view style="width: 100%;height: 200px;background: url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing06.png) no-repeat;background-size: cover;">
 			
 		</view>
 		

@@ -1,5 +1,5 @@
 <template>
-	<view class="" style="background: url(https://www.mastervan.cn/static/project/dolphin/static/images/背景02.png) no-repeat;background-size: cover;height: 700px;width: 100%;padding-top: 2%;font-family: Alibaba PuHuiTi;">
+	<view class="" style="background: url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing02.png) no-repeat;background-size: cover;height: 700px;width: 100%;padding-top: 2%;font-family: Alibaba PuHuiTi;">
 		<my-header></my-header>
 		<form @submit="submitData">
 			<view class="normal-color" style="height: 110px;overflow: hidden;">

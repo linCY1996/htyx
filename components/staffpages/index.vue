@@ -1,5 +1,5 @@
 <template>
-	<view class="baseSty" :style="{'height':isHeight+'px'}">
+	<view class="baseSty">
 		<view class="container999">
 			<view class='nav' :class="isModel=='iPhone X'?'paddingTop02':'paddingTop01'">
 				<view class="title-sty">
@@ -7,9 +7,7 @@
 				</view>
 			</view>
 		</view>
-
-
-		<view style="height: 230px;background: url(https://www.mastervan.cn/static/project/dolphin/static/images/背景06.png) no-repeat;background-size: cover;color: white;">
+		<view class="Tops" style="height: 230px;background: url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing06.png) no-repeat;background-size: cover;color: white;">
 			<view>
 				<view style="position: absolute;top:100px;left: 50px;display: flex;flex-direction: row;">
 					<view v-on:tap="upHead(userMsg.headPictureUrl)" style="display: inline-block;width: 70px;height: 70px;border-radius: 35px;background: white;overflow: hidden;">
@@ -33,22 +31,20 @@
 					</view>
 				</view>
 			</view>
-		</view>
-		<view style="width: 80%;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;margin: 0 auto;position: relative;top:-48px;height: 48px;background-color: white;z-index: 999;">
-			<view style="text-align: center;height: 44rpx;">
-				<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9;margin-right: 80px;">{{userMsg.orderNum}}单</view>
-				<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9">{{userMsg.price}}元</view>
+			<view class="TopPrice" style="width: 80%;border-top-right-radius: 20rpx;border-top-left-radius: 20rpx;margin: 0 auto;height: 48px;background-color: white;z-index: 999;">
+				<view style="text-align: center;height: 44rpx;">
+					<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9;margin-right: 80px;">{{userMsg.orderNum}}单</view>
+					<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9">{{userMsg.price}}元</view>
+				</view>
+				<view style="text-align: center;">
+					<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9;margin-right: 80px;">累计接单</view>
+					<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9">累计收入</view>
+				</view>
 			</view>
-
-			<view style="text-align: center;">
-				<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9;margin-right: 80px;">累计接单</view>
-				<view style="display: inline-block;width: 70px;text-align: center;font-size:16px;color: #c9c9c9">累计收入</view>
-			</view>
 		</view>
-
-		<view class="" style="background-color: #eeeeee;position: relative;top:-76px">
+		<view class="NavMsgs" style="background-color: #eeeeee;">
 			<view style="">
-				<view style="border-bottom: 2px solid white;margin-top: 60rpx;">
+				<view style="border-bottom: 2px solid white;">
 					<view style="padding-left: 5%;display: flex;align-items: center;">
 						<image src="/static/photo.png" mode="widthFix" style="width: 44rpx;"></image>
 						<view style="font-size: 18px">我的照片</view>
@@ -73,7 +69,6 @@
 					</scroll-view>
 				</view>
 			</view>
-
 			<view style="display: flex;padding-left: 5%;align-items: center;">
 				<image src="/static/order.png" mode="widthFix" style="width: 44rpx;"></image>
 				<view style="font-size: 18px">订单状态</view>
@@ -85,8 +80,7 @@
 					 :class="index==navIndex?'navSelect':''" @click='navClick(index)'>{{item}}</view>
 				</scroll-view>
 			</view>
-
-			<swiper :style="{'height': isHeight-308+'px'}" style="margin: 0 auto;width: 96%;" :current="currentTab" @change="swiperTab">
+			<swiper style="margin: 0 auto;width: 96%;" :current="currentTab" @change="swiperTab">
 				<swiper-item>
 					<view :style="{'height': isHeight-308+'px'}" style="overflow-y: scroll;overflow-x: hidden;">
 						<view v-for="(item,index) in notStart" :key='index' v-if="item.orderName!=''" v-on:tap='orderMsg(item.oid)' style="width: 100%;height: 60px;background: white;font-size: 10px;text-align: left;padding-left: 20px;padding-top: 8px;margin-bottom: 10px;box-shadow: 0 0 4px #CCCCCC;">
@@ -143,15 +137,12 @@
 				</swiper-item>
 			</swiper>
 		</view>
-
 		<view style="position: absolute;bottom:40px;right:20px">
-			<view style='width:40px;height:40px;background:url(https://www.mastervan.cn/static/project/dolphin/static/images/背景12.png);background-size:100% 100%'
+			<view style='width:40px;height:40px;background:url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing12.png);background-size:100% 100%'
 			 v-on:tap='callMe'>
-
 			</view>
 		</view>
 	</view>
-
 </template>
 
 <script>
@@ -173,7 +164,7 @@
 				videoList: [],
 				picsList: [],
 				height: '',
-				width: ''
+				width: '',
 			}
 		},
 		watch: {
@@ -196,6 +187,7 @@
 			//用户信息
 			let openId = uni.getStorageSync('openid');
 			let that = this;
+			let orderList = []
 			that.$http.getUserMsgs({
 				openId: openId
 			}).then(res => {
@@ -207,7 +199,6 @@
 					openId: openId,
 					userId: res.data.data.userId
 				}).then(res => {
-					// console.log("userdetailMsgs=", res)
 					let picsList = res.data.data.photoUrlList
 					let videoList = []
 					videoList.push(res.data.data.videoUrl)
@@ -225,42 +216,44 @@
 			that.$http.partTimeMsgs({
 				openId: openId
 			}).then(res => {
-				// console.log("userMsgs=", res)
+				// console.log("userdetailMsgs=", res)
 				that.userMsg = res.data.data
 				uni.setStorageSync('cid', res.data.data.cid)
-				//websocket
 				var cid = res.data.data.cid;
 				that.cid = cid;
+				console.log("cid",cid);
 				var set = setInterval(function() {
-					that.$http.findOrderList({
-						cid: cid,
+				that.$http.findOrderList({
+					cid: cid,
+					openId: openId
+				}).then(res => {
+					orderList = res.data.data
+					that.$http.findOrderID({
 						openId: openId
-					}).then(res => {
-						var oldSt = JSON.stringify(res.data.data);
-						var order = res.data.data;
-						console.log("订单列表=", order);
-						that.$http.findOrderID({
-							openId: openId
-						}).then(res => {
-							console.log("dingOrder", res);
-							var arr3 = res.data.data;
-							var allOid = [];
-							for (let i in arr3) {
-								allOid.push(arr3[i].orderId)
+					}).then(res =>{
+						var arr3 = res.data.data
+						var allOid = []
+						for(let i in arr3) {
+							allOid.push(arr3[i].orderId)
+						}
+						for (var i = 0; i < orderList.length; i++) {
+							let value = orderList[i].oid
+							for (var j = 0; j < allOid.length; j++) {
+								if(value == allOid[j]) {
+									orderList.splice(i, 1)
+									i = i-1
+								}
 							}
-							// 去除已抢订单
-							console.log("order==", order);
-							let st = JSON.stringify(that.getArrEqual(allOid, order));
-							// console.log("st", st);
-							// console.log("==", that.getArrEqual(allOid, order));
-							// if (that.getArrEqual(allOid, order).length != 0) {
-							// 	clearInterval(set);
-							// 	uni.navigateTo({
-							// 		url: '/pages/competed/index?st=' + st
-							// 	})
-							// }
-						})
+						}
+						var st = JSON.stringify(orderList)
+						if (orderList.length != 0) {
+							clearInterval(set);
+							uni.navigateTo({
+								url: '/pages/competed/index?st=' + st
+							})
+						}
 					})
+				})
 				}, 3000)
 			})
 			//审核中
@@ -285,17 +278,6 @@
 			findDetailUserMsg(e) {
 				console.log("video=",e);
 				console.log("123");
-			},
-			// 去除已抢订单
-			getArrEqual(arr1, arr2) {
-				for (let i = 0; i < arr2.length; i++) {
-					for (let j = 0; j < arr1.length; j++) {
-						if(arr2[i].oid == arr1[j]) {
-							arr2.splice(i, 1)
-						}
-					}
-				}
-				return arr2;
 			},
 			// 请求事件
 			isRequest() {
@@ -489,7 +471,15 @@
 		background-size: cover;
 		z-index: 998;
 	}
-
+	.Tops {
+		position: relative;
+	}
+	.TopPrice {
+		position: absolute;
+		bottom: 0rpx;
+		left: 50%;
+		transform: translateX(-50%);
+	}
 	.title-sty {
 		font-size: 18px;
 		font-weight: 600;
@@ -502,9 +492,8 @@
 
 	.baseSty {
 		width: 100%;
-		overflow-x: hidden;
-		overflow-y: hidden;
-		font-family: 'Alibaba PuHuiTi'
+		font-family: 'Alibaba PuHuiTi';
+		height: auto;
 	}
 
 	.baseSty::-webkit-scrollbar {

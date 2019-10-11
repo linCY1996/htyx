@@ -10,10 +10,10 @@
 					<view style="flex-grow: 2;"></view>
 				</view>
 			</view>
-			<view :style="{'height':isHeight+'px'}" style="overflow-y: scroll;font-size:16px">
-				<view style="width:90%;margin:0 auto;border: 1px solid #dddddd;padding: 2%;border-radius: 15rpx;">
+			<view  :style="{'height':isHeight+'px'}" style="overflow-y: scroll;font-size:16px">
+				<view class="NavMsg" style="width:90%;margin:0 auto;border: 1px solid #dddddd;padding: 2%;border-radius: 15rpx;">
 					<view style="margin-bottom:10px;display: flex;">
-						  <image src="/static/icon/date.png" style="width:40rpx;height:40rpx"></image>
+						<image src="/static/icon/date.png" style="width:40rpx;height:40rpx"></image>
 						<text>活动时间:{{dataList.activityBeginTime}}-{{dataList.activityAfterTime}}</text>
 					</view>
 					<view style="margin-bottom:10px;display: flex;">
@@ -23,6 +23,9 @@
 					<view style="margin-bottom:10px;display: flex;">
 						<image src="/static/remark.png" style="width:40rpx;height:40rpx"></image>
 						<text>订单备注:{{dataList.orderRemark}}</text>
+					</view>
+					<view class="showPrice">
+						￥{{dataList.ctypeStr}}
 					</view>
 				</view>
 			</view>
@@ -52,7 +55,6 @@
 					//console.log(456)
 				}
 			})
-			
 			let openId=uni.getStorageSync('openid');
 			let cid = uni.getStorageSync('cid')
 			let _this=this;
@@ -66,10 +68,17 @@
 				method:'POST',
 				header : {'content-type':'application/x-www-form-urlencoded'},
 				success:function(res){
-					console.log(res)
 					if(res.data.data.orderMessage!=undefined){
-						//console.log(res.data.data.orderMessage)
-						_this.dataList=res.data.data.orderMessage
+						var OrderMsgs = res.data.data.orderMessage
+						var userType = 'c'+cid
+						var typeList = OrderMsgs.ctypeStr.split("_")
+						typeList.forEach(function(item) {
+							if(item.slice(0,2) == userType) {
+								var UserPrice = item.slice(3,item.length+1)
+								OrderMsgs.ctypeStr = UserPrice
+							}
+						})
+						_this.dataList=OrderMsgs
 					}
 				}
 			})
@@ -120,5 +129,17 @@
 	}
 	.ctrlSty{
 		margin-top: 30px;
+	}
+	.NavMsg {
+		position: relative;
+	}
+	.showPrice {
+		position: absolute;
+		right: 60rpx;
+		bottom: 37rpx;
+		width: 120rpx;
+		height: 30rpx;
+		line-height: 30rpx;
+		text-align: right;
 	}
 </style>

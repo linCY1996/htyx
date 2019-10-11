@@ -2,7 +2,6 @@
 	<view class="loading_box" v-show="is_loading=='1'" @click="switch_loading">
 		<view class="loading">
 			<image class="rotate" src="https://www.mastervan.cn/static/project/dolphin/static/loading2.png" mode=""></image>
-			 
 		</view>
 		
 		<!-- <view class="loading">
@@ -35,7 +34,6 @@
 		},
 		computed:{
 			is_loading(){
-				console.log("---------")
 				console.log(this.$store.state.loading)
 				return this.$store.state.loading
 			}

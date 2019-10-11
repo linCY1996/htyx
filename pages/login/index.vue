@@ -54,7 +54,6 @@
         methods: {
 　　　　　　//登录
             getUserInfo(e) {
-				console.log(e);
 				var that = this
 				if(e.detail.errMsg == 'getUserInfo:fail auth deny') {
 						console.log("未点击授权");

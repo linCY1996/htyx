@@ -165,47 +165,49 @@
 		},
 		created() {
 			console.log('App created');
-			// let _this=this;
-			// // 判断用户是否注册,已注册用户类型
-			// let openid=uni.getStorageSync('openid')
-			// if(openid==null||openid==undefined||openid==''){
-			// 	uni.navigateTo({
-			// 		url:'/pages/login/index'
-			// 	})
-			// }else{
-			// 	uni.request({
-			// 		url:_this.$store.state.baseurl+'/user/verifyRole',
-			// 		data:{
-			// 			openId:openid
-			// 		},
-			// 		method:"POST",
-			// 		header : {'content-type':'application/x-www-form-urlencoded'},
-			// 		success:function(res){
-			// 			let type=res.data.data;
-			// 			//console.log(type)
-			// 			if(type==-1){
-			// 				
-			// 			}else if(type==-2){
-			// 				uni.reLaunch({
-			// 					url:'/pages/login/index'
-			// 				})
-			// 			}else if(type==0){
-			// 				uni.reLaunch({
-			// 					url:'/pages/status/index'
-			// 				})
-			// 			}else if(type==2){
-			// 				uni.reLaunch({
-			// 					url:'/pages/index/index'
-			// 				})
-			// 			}else if(type==3){
-			// 				uni.reLaunch({
-			// 					url:'/pages/index01/index'
-			// 				})
-			// 			}
-			// 		}
-			// 	})
-			// }
-			
+			let _this=this;
+			// 判断用户是否注册,已注册用户类型
+			let openid=uni.getStorageSync('openid')
+			console.log("openid", openid);
+			if(openid==''){
+				uni.navigateTo({
+					url:'/pages/login/index'
+				})
+			}else{
+				uni.request({
+					url:_this.$store.state.baseurl+'/user/verifyRole',
+					data:{
+						openId:openid
+					},
+					method:"POST",
+					header : {'content-type':'application/x-www-form-urlencoded'},
+					success:function(res){
+						let type=res.data.data;
+						//console.log(type)
+						if(type==-1){
+							
+						}else if(type==-2){
+							uni.reLaunch({
+								url:'/pages/login/index'
+							})
+						}else if(type==0){
+							uni.reLaunch({
+								url:'/pages/status/index'
+							})
+						}else if(type==2){
+							uni.setStorageSync('userType', 2)
+							uni.reLaunch({
+								url:'/pages/index/index'
+							})
+						}else if(type==3){
+							uni.setStorageSync('userType', 3)
+							uni.reLaunch({
+								url:'/pages/index01/index'
+							})
+						}
+					}
+				})
+			}
 			this.setHeight();
 			this.getHeight();
 			this.getWidth(); 
@@ -216,7 +218,6 @@
 				let _this=this;
 				uni.getSystemInfo({
 					success:function(res){
-						console.log(res)
 						_this.$store.commit('setModel',res.model)
 						//console.log(_this.$store.state.model)
 					}

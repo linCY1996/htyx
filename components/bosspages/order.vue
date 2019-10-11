@@ -9,7 +9,7 @@
 					<view style="flex-grow: 1;z-index: 999;" v-on:tap="goback">
 						<image src="https://www.mastervan.cn/static/project/dolphin/static/images/back.png" style="width: 16px;height: 16px;" mode=""></image>
 					</view>
-					<view style="flex-grow: 8;">模特详情</view>
+					<view style="flex-grow: 8;">个人详情</view>
 					<view style="flex-grow: 2;"></view>
 				</view>
 			</view>

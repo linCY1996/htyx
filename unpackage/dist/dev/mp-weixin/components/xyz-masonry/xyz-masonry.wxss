@@ -71,6 +71,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.TagState {
+  width: 106rpx;
+  height: 33rpx;
+  font-size: 20rpx;
+  text-align: center;
+  margin-right: 12rpx;
+  margin-top: 12rpx;
+  border-radius: 16rpx;
+  color: white;
+  display: inline-block;
+}
 .icon-xiasanjiaoxing:before {
   content: "\E642";
 }

@@ -1,24 +1,24 @@
 <template>
-	<view>
+	<view class="content">
 		
 	</view>
 </template>
 
 <script>
 	export default {
-		onLoad() {
+		mounted() {
 			uni.showLoading({
 				title: '加载中',
 				mask: false
-			});
-			let that = this;
-			// 判断用户是否注册,已注册用户类型
+			});    
+			var that = this; 
+			// 判断用户是否注册,已注册用   
 			let openid = uni.getStorageSync('openid')
-			console.log("openid", openid);
-			if (openid == null || openid == undefined || openid == '') {
+			console.log("openid====", openid);
+			if (openid=='') {
 				uni.reLaunch({
 					url: '/pages/login/index'
-				})
+				})     
 			} else {
 				that.$http.changeLogin({
 					openId: openid
@@ -52,4 +52,8 @@
 </script>
 
 <style>
+	.content {
+		width: 100%;
+		height: 100%;
+	}
 </style>
