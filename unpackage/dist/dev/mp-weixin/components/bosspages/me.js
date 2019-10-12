@@ -364,9 +364,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 var _default =
 {
   data: function data() {
@@ -614,16 +611,24 @@ var _default =
       data.evaluateType = this.type;
       var tag = '';
       var stag = this.stag;
+      var tagList = [];
+      // 对数组去重
       for (var i = 0; i < stag.length; i++) {
-        if (i == 0) {
-          tag += String(stag[i]);
+        if (tagList.indexOf(stag[i]) == -1) {
+          tagList.push(stag[i]);
+        }
+      }
+      // 对数组重构
+      for (var _i = 0; _i < tagList.length; _i++) {
+        if (_i == 0) {
+          tag += String(tagList[_i]);
         } else {
-          tag += '-' + String(stag[i]);
+          tag += '-' + String(tagList[_i]);
         }
       }
       data.elIdStr = tag;
       uni.uploadFile({
-        url: _this.$store.state.baseurl + '/evaluateRecord/create', //仅为示例，非真实的接口地址
+        url: _this.$store.state.baseurl + '/evaluateRecord/create',
         filePath: _this.aimg,
         name: 'file',
         formData: data,
@@ -664,6 +669,7 @@ var _default =
 
     },
     getTag: function getTag(tid) {
+
       if (this.stag.length < 7) {
         this.stag.push(tid);
       }

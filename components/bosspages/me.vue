@@ -7,11 +7,8 @@
 				</view>
 			</view>
 		</view>
-
 		<view style="width: 100%;height: 200px;background: url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing06.png) no-repeat;background-size: cover;">
-
 		</view>
-
 		<view style="background: white;width: 100%;height: 140px;border-radius: 12px 12px 0 0;box-shadow: 0 0 4px #CCCCCC;margin-top: -50px;">
 			<view style="position: relative;top:-40px">
 				<view v-on:tap="upHead(userMsg.headPhotoUrl)" style='width: 100px;height: 80px;background: white;margin:0 auto'>
@@ -196,7 +193,7 @@
 				<view class="BtnCommand" @tap="upAct(oneOrder.userId,oneOrder.orderMessage.oid,oneOrder.userName,oneOrder.cid)">活动评价</view>
 				<view class="BtnHide" @tap="hideCommand">点击关闭</view>
 			</view>
-			<!-- 对活动评价 -->
+			<!-- 对活动、人员评价 -->
 			<view v-show="showUp" class="command_Activity">
 				<view class="command_ATitle" v-if="userName!=''">对{{userName}}评价</view>
 				<view class="command_ATitle" v-if="userName==''">对本次活动评价</view>
@@ -204,7 +201,7 @@
 					<text>填写评价:</text>
 					<textarea value="" v-model="pingjia" placeholder="添加评价..." />
 				</view>
-				<view class="command_AImgs">
+				<view class="command_AImgs">     
 					<text>活动照片:</text>
 					<view class="command_AUpImgs" @tap="upAimg">
 					<image v-if="aimg==''" src="../../static/addImgs.png" mode="aspectFit"></image>
@@ -507,16 +504,24 @@
 				data.evaluateType = this.type;
 				let tag = '';
 				let stag = this.stag;
-				for (let i = 0; i < stag.length; i++) {
+				var tagList = []
+				// 对数组去重
+				for(var i = 0;i<stag.length;i++) {
+					if(tagList.indexOf(stag[i]) == -1) {
+						tagList.push(stag[i])
+					}
+				}
+				// 对数组重构
+				for (let i = 0; i < tagList.length; i++) {
 					if (i == 0) {
-						tag += String(stag[i])
+						tag += String(tagList[i])
 					} else {
-						tag += '-' + String(stag[i])
+						tag += '-' + String(tagList[i])
 					}
 				}
 				data.elIdStr = tag;
 				uni.uploadFile({
-					url: _this.$store.state.baseurl + '/evaluateRecord/create', //仅为示例，非真实的接口地址
+					url: _this.$store.state.baseurl + '/evaluateRecord/create',
 					filePath: _this.aimg,
 					name: 'file',
 					formData: data,
@@ -557,6 +562,7 @@
 				});
 			},
 			getTag: function(tid) {
+				
 				if (this.stag.length < 7) {
 					this.stag.push(tid)
 				}
