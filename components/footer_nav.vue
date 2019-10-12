@@ -45,7 +45,6 @@
 				}
 			},
 			footer_nav(){
-				console.log(this.$store.state.footer_store.footer_nav)
 				return this.$store.state.footer_store.footer_nav
 			},
 			now_index(){

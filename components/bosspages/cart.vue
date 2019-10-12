@@ -78,10 +78,9 @@
 							</picker>
 						</view>
 					</view>
-					<view style="display: flex;flex-direction: row;height: 120px;line-height: 120px;margin-bottom:50px">
+					<view class="textParent">
 						<text style="flex-grow: 2;">订单备注:</text>
-						<input style="flex-grow: 6;text-align: left;height: 120px;" class="inputShadow" type="text" value="" maxlength="500"
-						 name='orderRemark' />
+						<textarea :fixed="true" class="textAreaShadow" type="text" value="" name='orderRemark' :maxlength="-1" />
 					</view>
 				</view>
 				<view>
@@ -157,7 +156,6 @@
 					strDate = "0" + strDate;
 				}
 				var currentdate = year + seperator1 + month + seperator1 + strDate;
-				console.log(currentdate)
 				return currentdate;
 			}
 		},
@@ -174,7 +172,6 @@
 					'content-type': 'application/x-www-form-urlencoded'
 				},
 				success: function(res) {
-					console.log(res)
 					let cart = res.data.data;
 					_this.$store.commit('setCart', cart);
 					//console.log(_this.$store.state.cart)
@@ -203,7 +200,6 @@
 								},
 								success: function(res) {
 									if (res.data.success == true) {
-										//console.log(res.data)
 										let cart = res.data.data;
 										_this.$store.commit('setCart', cart);
 									} else {
@@ -211,11 +207,6 @@
 											title: '提示',
 											content: '删除失败',
 											success: function(res) {
-												if (res.confirm) {
-													//console.log('用户点击确定');
-												} else if (res.cancel) {
-													//console.log('用户点击取消');
-												}
 											}
 										});
 									}
@@ -254,7 +245,6 @@
 				if (e) {
 					this[this.type] = e.value;
 					this.enddate = this[this.type]
-					console.log("dateTime", this.enddate);
 				}
 			},
 			startChange: function(e) {
@@ -267,19 +257,9 @@
 				this.enddate = e.target.value
 			},
 			submitOrder: function(e) {
-
 				let cart = this.$store.state.cart;
 				let _this = this;
 				let allId = '';
-
-				// if(cart.length==0){
-				// 	uni.showModal({
-				// 		title: '提示',
-				// 		content: '请选择所需人员'
-				// 		})
-				// 	return false
-				// }
-
 				for (let i in cart) {
 					if (i == 0) {
 						allId = cart[i].userId
@@ -287,8 +267,6 @@
 						allId = allId + '-' + cart[i].userId
 					}
 				}
-
-
 				let total = this.total;
 				let openId = uni.getStorageSync('openid');
 				e.detail.value.orderPrice = total;
@@ -298,12 +276,10 @@
 				e.detail.value.activityBeginTime = this.startdate;
 				e.detail.value.activityAfterTime = this.enddate;
 				e.detail.value.activityAddress = e.detail.value.address + e.detail.value.xiang
-				// console.log(allId)
-				//console.log(e.detail.value)
-
-				//console.log(e.detail.value.dockingPeopleName)
 				//判断是否填写数据
-				console.log(e)
+				if(!_this.util.phoneNumber(e.detail.value.dockingPeoplePhone)) {
+					return
+				}
 				if (e.detail.value.address == '选择地址' || e.detail.value.xiang == '' || e.detail.value.dockingPeopleName == '' || e.detail
 					.value.dockingPeoplePhone == '' || e.detail.value.activityName == '' || e.detail.value.activityBeginTime == '' ||
 					e.detail.value.activityAfterTime == '') {
@@ -317,7 +293,6 @@
 						content: '购物车不能为空'
 					})
 				} else {
-
 					uni.showModal({
 						title: '提示',
 						content: '确认提交',
@@ -366,16 +341,6 @@
 					});
 
 				}
-				// else if (!(/^[1](([3|5|8][\\d])|([4][4,5,6,7,8,9])|([6][2,5,6,7])|([7][^9])|([9][1,8,9]))[\\d]{8}$/.test(e.detail.value.dockingPeoplePhone))){
-				// 	uni.showModal({
-				// 		title: '提示',
-				// 		content: '请填写正确的手机号'
-				// 		})
-				// }
-
-
-
-
 			}
 		}
 	}
@@ -416,7 +381,22 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
-
+	.textParent {
+		display: flex;
+		flex-direction: row;
+		height: 240rpx;
+		/* line-height: 240rpx; */
+		margin-bottom:100rpx
+	}
+	.textAreaShadow {
+		flex-grow: 6;
+		text-align: left;
+		height: 240rpx;
+		width: 362rpx;
+		padding-left: 20rpx;
+		border-radius: 12rpx;
+		box-shadow: 0 0 12rpx #c0c0c0;
+	}
 	.jian {
 		background: -webkit-linear-gradient(rgba(0, 0, 0, 0), black);
 		/* Safari 5.1 - 6.0 */

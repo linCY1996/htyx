@@ -86,7 +86,6 @@
 			
 		},
 		onReady() {
-			//console.log(this.$store.state.model)
 			var cid = JSON.stringify(this.cIndex)
 			this.$store.commit('changeCid',cid)
 			this.initData()
@@ -137,7 +136,6 @@
 				let openid=uni.getStorageSync('openid');
 				let _this=this;
 				let cIndex=this.jobId[index];
-				console.log("cIndex", cIndex);
 				_this.$store.commit('changeCid',cIndex)
 				_this.cIndex=cIndex;
 				_this.$http.getList({
@@ -145,7 +143,6 @@
 					page:_this.isPage,
 					cid:cIndex
 				}).then(res => {
-					console.log("res", res);
 					let list=res.data.data.list;
 					if(list!=undefined){
 						_this.dataList=list;
@@ -155,7 +152,6 @@
 			},
 			// swiper 滑动
 			swiperTab: function(e) {
-				//console.log(e)
 				var index = e.detail.current
 				let cIndex=this.jobId[index];
 				this.cIndex=cIndex;
@@ -166,7 +162,6 @@
 			},
 			lower1(){
 				let openid=uni.getStorageSync('openid');
-				// console.log(openid)
 				let _this=this;
 				_this.addPage+=1;
 				_this.$http.getList({
@@ -175,7 +170,6 @@
 					cid:_this.cIndex
 				}).then(res => {
 					let list=res.data.data.list;
-					console.log(list)
 					if(list!=undefined){
 						for(let i in list){
 							_this.dataList.push(list[i]);
@@ -185,7 +179,6 @@
 			},
 			initData:function(){
 				let openid=uni.getStorageSync('openid');
-				// console.log(openid)
 				let _this=this;
 				_this.$http.getWork({
 					openId:openid
@@ -215,7 +208,6 @@
 			},
 			toSearch:function(){
 				let _this=this;
-				// console.log("Content", _this.ContentMsg);
 				uni.navigateTo({
 					url:'/pages/search/index?content='+_this.ContentMsg
 				})

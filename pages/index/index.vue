@@ -32,17 +32,10 @@
 			}
 		},
 		onLoad() {
-			//console.log('index onload')
-			//this.$store.dispatch('get_data');
 			uni.loadFontFace ({
 			  family: 'Alibaba PuHuiTi',
 			  source: 'url("https://www.mastervan.cn/static/project/dolphin/static/font/alifont/AlibabaPuHuiTi-Light.ttf")',
-			  success: function(){
-					console.log('load font success')
-				  },
-				fail() {
-					//console.log(456)
-				}
+			  success: function(){}
 			})
 		},
 		methods: {

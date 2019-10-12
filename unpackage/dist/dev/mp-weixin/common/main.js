@@ -106,174 +106,56 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   onShow: function onShow() {
-    // console.log('App Show');
-    // let _this=this;
-    // let openid=uni.getStorageSync('openid')
-    // uni.request({
-    // 	url:_this.$store.state.baseurl+'/user/verifyRole',
-    // 	data:{
-    // 		openId:openid
-    // 	},
-    // 	method:"POST",
-    // 	header : {'content-type':'application/x-www-form-urlencoded'},
-    // 	success:function(res){
-    // 		let type=res.data.data;
-    // 		//console.log(type)
-    // 		if(type==-1){
-    // 			
-    // 		}else if(type==-2){
-    // 			// uni.reLaunch({
-    // 			// 	url:'/pages/login/index'
-    // 			// })
-    // 		}else if(type==0){
-    // 			uni.reLaunch({
-    // 				url:'/pages/status/index'
-    // 			})
-    // 		}else if(type==2){
-    // 			// uni.setStorageSync('userType',2)
-    // 			// uni.reLaunch({
-    // 			// 	url:'/pages/index/index'
-    // 			// })
-    // 		}else if(type==3){
-    // 			// uni.setStorageSync('userType',3)
-    // 			// uni.reLaunch({
-    // 			// 	url:'/pages/index01/index'
-    // 			// })
-    // 		}
-    // 	}
-    // })
 
-    // let userType=uni.getStorageSync('userType');
-    // if(userType==3){
-    // 	//用户信息
-    // 	let openId=uni.getStorageSync('openid');
-    // 	uni.request({
-    // 		url:_this.$store.state.baseurl+'/user/partTimeMessage',
-    // 		data:{
-    // 			openId:openId
-    // 		},
-    // 		method:'POST',
-    // 		header : {'content-type':'application/x-www-form-urlencoded'},
-    // 		success:function(res){
-    // 			//let cart=res.data.data;
-    // 			//_this.$store.commit('setCart',cart);
-    // 			//console.log(_this.$store.state.cart)
-    // 			
-    // 			uni.setStorageSync('cid',res.data.data.cid)
-    // 			//websocket
-    // 			let cid=res.data.data.cid;
-    // 			
-    // 			let set=setInterval(function(){
-    // 				uni.request({
-    // 					url:_this.$store.state.baseurl+'/order/findOrderList',
-    // 					data:{
-    // 						cid:cid,
-    // 						openId:openId
-    // 					},
-    // 					method:'POST',
-    // 					header:{'content-type':'application/x-www-form-urlencoded'},
-    // 					success(res) {
-    // 						//console.log(typeof res.data.data)
-    // 						clearInterval(set);
-    // 						let oldSt=JSON.stringify(res.data.data);
-    // 						
-    // 						let order=res.data.data;
-    // 						uni.request({
-    // 							url:_this.$store.state.baseurl+'/userOrder/findOrderId',
-    // 							data:{
-    // 								openId:openId
-    // 							},
-    // 							method:'POST',
-    // 							header : {'content-type':'application/x-www-form-urlencoded'},
-    // 							success:function(oidArr){
-    // 								//console.log(oidArr.data.data)
-    // 								let arr3=oidArr.data.data;
-    // 								let allOid=[];
-    // 								for(let i in arr3){
-    // 									allOid.push(arr3[i].orderId)
-    // 								}
-    // 								console.log(allOid)
-    // 								
-    // 								
-    // 								//去除已抢订单
-    // 								function getArrEqual(arr1, arr2) {
-    // 								        let newArr = [];
-    // 								        for (let i = 0; i < arr2.length; i++) {
-    // 								            for (let j = 0; j < arr1.length; j++) {
-    // 								                if(arr1[j] === arr2[i].oid){
-    // 								                    arr2.splice(i,1)
-    // 								                }
-    // 								        }
-    // 								     }
-    // 								     return arr2;
-    // 								}
-    // 								
-    // 								let st=JSON.stringify(getArrEqual(allOid,order));
-    // 								
-    // 								if(getArrEqual(allOid,order).length!=0){
-    // 									uni.navigateTo({
-    // 										url:'/pages/competed/index?st='+st
-    // 									})
-    // 								}
-    // 							},
-    // 							fail() {
-    // 								
-    // 							}
-    // 						})
-    // 					}
-    // 				})
-    // 			},30000)
-    // 		 }
-    // 	})
-    // }
   },
   onHide: function onHide() {
     console.log('App Hide');
   },
   created: function created() {
-    console.log('App created');
+    console.log("App Create");
+    uni.showLoading({
+      title: '加载中',
+      mask: true });
+
     var _this = this;
-    // 判断用户是否注册,已注册用户类型
+    // 判断用户是否注册,已注册用户类型   
     var openid = uni.getStorageSync('openid');
     console.log("openid", openid);
-    if (openid == '') {
-      uni.navigateTo({
-        url: '/pages/login/index' });
-
-    } else {
-      uni.request({
-        url: _this.$store.state.baseurl + '/user/verifyRole',
-        data: {
-          openId: openid },
-
-        method: "POST",
-        header: { 'content-type': 'application/x-www-form-urlencoded' },
-        success: function success(res) {
-          var type = res.data.data;
-          //console.log(type)
-          if (type == -1) {
-
-          } else if (type == -2) {
-            uni.reLaunch({
-              url: '/pages/login/index' });
-
-          } else if (type == 0) {
-            uni.reLaunch({
-              url: '/pages/status/index' });
-
-          } else if (type == 2) {
-            uni.setStorageSync('userType', 2);
-            uni.reLaunch({
-              url: '/pages/index/index' });
-
-          } else if (type == 3) {
-            uni.setStorageSync('userType', 3);
-            uni.reLaunch({
-              url: '/pages/index01/index' });
-
-          }
+    if (openid == '' || openid == null) {
+      console.log("here====");
+      uni.redirectTo({
+        url: '/pages/login/index',
+        success: function success() {
+          uni.hideLoading();
         } });
 
+    } else {
+      _this.$http.changeLogin({
+        openId: openid }).
+      then(function (res) {
+        uni.hideLoading();
+        var type = res.data.data;
+        console.log("type", type);
+        if (type == -1 || type == -2) {
+          uni.reLaunch({
+            url: '/pages/identity/index' });
+
+        } else if (type == 0) {
+          uni.reLaunch({
+            url: '/pages/status/index' });
+
+        } else if (type == 2) {
+          uni.setStorageSync('userType', 2);
+          uni.reLaunch({
+            url: '/pages/index/index' });
+
+        } else if (type == 3) {
+          uni.setStorageSync('userType', 3);
+          uni.reLaunch({
+            url: '/pages/index01/index' });
+
+        }
+      });
     }
     this.setHeight();
     this.getHeight();

@@ -1,12 +1,10 @@
 <template>
 	<view>
 		<view class="baseSty" style="font-family: 'Alibaba PuHuiTi';">
-			
 			<view class='nav'>
 				<view class="whiteBlock1" :style="{'height': stateBarHeight+'px'}"></view>
 				<view class="whiteBlock2" :style="{'padding-top': stateBarHeight+'px'}">
 					<view class="title-sty" style="display: flex;flex-direction: row;">
-					
 						<view style="flex-grow: 1;z-index: 999;" v-on:tap="goback">
 							<image src="https://www.mastervan.cn/static/project/dolphin/static/images/back.png" style="width: 16px;height: 16px;" mode=""></image>
 						</view>
@@ -41,16 +39,9 @@
 						<view class="other">
 							<view class="">
 								备注:{{dataList.orderRemark}}
-								
 							</view>
-							
 						</view>
-						
 					</view>
-		
-					
-					
-					
 				</view>
 				<view class="centerNav">
 					<view style="width: 80%;height: 100%;" class="nav80">
@@ -79,7 +70,6 @@
 						</swiper-item>
 					</swiper>
 				</view>
-		
 			</view>
 		</view>
 	</view>
@@ -99,20 +89,13 @@
 			}
 		},
 		onLoad(option) {
-			console.log(option.oid)
 			this.oid=option.oid;
 			this.stateBarHeight=this.$store.state.statusBarHeight
 			uni.loadFontFace ({
 			  family: 'Alibaba PuHuiTi',
 			  source: 'url("https://www.mastervan.cn/static/project/dolphin/static/font/alifont/AlibabaPuHuiTi-Light.ttf")',
-			  success: function(){
-					console.log('load font success')
-				  },
-				fail() {
-					//console.log(456)
-				}
+			  success: function(){}
 			})
-			
 			let openId=uni.getStorageSync('openid');
 			let _this=this;
 			_this.$http.getWork({
@@ -124,7 +107,6 @@
 		},
 		computed: {
 			isModel:function(){
-				//console.log(this.$store.state.model)
 				return this.$store.state.model;
 			},
 			isHeight:function(){
@@ -138,12 +120,10 @@
 				})
 			},
 			navClick: function(index){
-				console.log(index)
 				this.navIndex = index
 				this.getOrderLsit(index+1)
 			},
 			swiperChange: function(e){
-				console.log(e)
 				let index = e.detail.current
 				this.navClick(index)
 			},
@@ -160,10 +140,7 @@
 					method:'POST',
 					header : {'content-type':'application/x-www-form-urlencoded'},
 					success:function(res){
-						console.log(res)
 						if(res.data.data.orderMessage!=undefined){
-							console.log(res)
-							//console.log(res.data.data.orderMessage)
 							_this.dataList=res.data.data.orderMessage;
 							var arr = _this.orderList
 							arr.splice(index-1,1,res.data.data.list);
@@ -173,7 +150,6 @@
 				})
 			},
 			toOrder:function(e){
-				//console.log(e)
 				uni.navigateTo({
 					url:'/components/bosspages/order?id='+e
 				})

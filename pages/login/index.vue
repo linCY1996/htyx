@@ -1,6 +1,5 @@
 <template>
     <view style="font-family: Alibaba PuHuiTi;">
-        <!-- #ifdef MP-WEIXIN -->
         <!-- <view v-if="isCanUse"> -->
 			<image class="Top" :style="{width:width+'px'}" src="http://47.108.26.160:8080/pictures/fengmian.png" mode="">
 				<button class='bottom' style="background: rgba(183, 189, 190, 0.4);font-family: Source Han Sans CN;" type='primary' open-type="getUserInfo" @getuserinfo="getUserInfo" withCredentials="true" lang="zh_CN">
@@ -21,7 +20,6 @@
                 
             </view> -->
         <!-- </view> -->
-        <!-- #endif -->
     </view>
 </template>
 
@@ -37,19 +35,8 @@
 				width:''
             };
         },
-		
 		onLoad() {
 			this.width = uni.getSystemInfoSync().windowWidth
-			// uni.loadFontFace ({
-			//   family: 'Alibaba PuHuiTi',
-			//   source: 'url("https://www.mastervan.cn/static/project/dolphin/static/font/alifont/AlibabaPuHuiTi-Light.ttf")',
-			//   success: function(){
-			// 		// console.log('load font success')
-			// 	  },
-			// 	fail() {
-			// 		//console.log(456)
-			// 	}
-			// })
 		},
         methods: {
 　　　　　　//登录

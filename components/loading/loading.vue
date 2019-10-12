@@ -34,7 +34,6 @@
 		},
 		computed:{
 			is_loading(){
-				console.log(this.$store.state.loading)
 				return this.$store.state.loading
 			}
 		}

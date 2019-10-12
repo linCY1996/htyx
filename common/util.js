@@ -1,5 +1,5 @@
-let host = 'https://www.mastervan.cn' //正式服
-// let host = 'http://47.108.66.16:8088' //体验服
+// let host = 'https://www.mastervan.cn' //正式服
+let host = 'http://47.108.66.16:8088' //体验服
 
 function getDomain() {
 	return host;
@@ -74,40 +74,55 @@ var dateUtils = {
 };
 
 // 计算距离
-function distanceCal(lat1,lon1,lat2,lon2) {
-  var lat1 = lat1
-  var lat2 = lat2
-  var lng1 = lon1
-  var lng2 = lon2
-  var radLat1 = rad(lat1);
-  var radLat2 = rad(lat2);
-  var a = radLat1 - radLat2;
-  var b = rad(lng1) - rad(lng2);
-  var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
-  s = s * 6378.137;
-  // EARTH_RADIUS; 
-  s = Math.round(s * 10000) / 10;
-  return s
+function distanceCal(lat1, lon1, lat2, lon2) {
+	var lat1 = lat1
+	var lat2 = lat2
+	var lng1 = lon1
+	var lng2 = lon2
+	var radLat1 = rad(lat1);
+	var radLat2 = rad(lat2);
+	var a = radLat1 - radLat2;
+	var b = rad(lng1) - rad(lng2);
+	var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(
+		b / 2), 2)));
+	s = s * 6378.137;
+	// EARTH_RADIUS; 
+	s = Math.round(s * 10000) / 10;
+	return s
 }
 
 function rad(d) {
-  return d * Math.PI / 180.0;
+	return d * Math.PI / 180.0;
 }
 
 function createOrderNo() {
-  let str = ''
-  for (let i = 0; i < 7; i++) { // 6位随机数，用以加在时间戳后面。
-    str += Math.floor(Math.random() * 10)
-  }
-  str = new Date().getTime() + str
-  return `${str}`
+	let str = ''
+	for (let i = 0; i < 7; i++) { // 6位随机数，用以加在时间戳后面。
+		str += Math.floor(Math.random() * 10)
+	}
+	str = new Date().getTime() + str
+	return `${str}`
+}
+
+// 判断电话号码
+function phoneNumber(e) {
+	if (!(/^1\d{10}$/).test(e)) {
+		uni.showToast({
+			title: '手机号格式错误！',
+			icon: 'none',
+			duration:3000
+		})
+		return false
+	}
+	return true
 }
 
 module.exports = {
 	formatTime: formatTime,
 	formatLocation: formatLocation,
 	dateUtils: dateUtils,
-	distanceCal:distanceCal,
-	createOrderNo:createOrderNo,
-	getDomain:getDomain
+	distanceCal: distanceCal,
+	createOrderNo: createOrderNo,
+	getDomain: getDomain,
+	phoneNumber:phoneNumber
 }

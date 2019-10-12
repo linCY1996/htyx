@@ -1,10 +1,10 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages 
 		{
-			"path": "pages/login/main"//登录
+			"path": "pages/login/main"
 		},
 		{ 
-			"path": "pages/login/index"//登录
+			"path": "pages/login/index"//登录 
 		},
 		{
 			"path": "pages/userMsg/boss"//上传信息

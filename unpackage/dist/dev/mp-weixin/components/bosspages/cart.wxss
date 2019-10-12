@@ -31,6 +31,33 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+.textParent {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	    -ms-flex-direction: row;
+	        flex-direction: row;
+	height: 240rpx;
+	/* line-height: 240rpx; */
+	margin-bottom:100rpx
+}
+.textAreaShadow {
+	-webkit-box-flex: 6;
+	-webkit-flex-grow: 6;
+	    -ms-flex-positive: 6;
+	        flex-grow: 6;
+	text-align: left;
+	height: 240rpx;
+	width: 362rpx;
+	padding-left: 20rpx;
+	border-radius: 12rpx;
+	-webkit-box-shadow: 0 0 12rpx #c0c0c0;
+	        box-shadow: 0 0 12rpx #c0c0c0;
+}
 .jian {
 	/* Safari 5.1 - 6.0 */
 	background: -o-linear-gradient(rgba(0, 0, 0, 0), black);

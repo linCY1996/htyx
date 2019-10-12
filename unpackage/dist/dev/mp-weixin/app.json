@@ -26,6 +26,5 @@
   "usingComponents": {
     "fr-loading": "/components/loading/loading",
     "my-header": "/components/header"
-  },
-  "sitemapLocation": "sitemap7.json"
+  }
 }

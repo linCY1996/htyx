@@ -185,33 +185,8 @@
 			this.uid=option.id;
 		},
 		onReady() {
-			//console.log(this.$store.state.model)
-			// var Model=[
-			// 		// iPhone X,iPhone XS,iPhone Xs Max
-			// 		{
-			// 			stateBarHeight: '132upx',
-			// 			navBarHeight: '132upx'
-			// 		},
-			// 		// iPhone XR
-			// 		{
-			// 			stateBarHeight: '88upx',
-			// 			navBarHeight: '88upx'
-			// 		},
-			// 		// iPhone 6Plus,6sPlus ,iPhone 8Plus,7Plus
-			// 		{
-			// 			stateBarHeight: '60upx',
-			// 			navBarHeight: '132upx'
-			// 		},
-			// 		// 其他机型
-			// 		{
-			// 			stateBarHeight: '40upx',
-			// 			navBarHeight: '88upx'
-			// 		}
-			// 	]
 			this.isModel=this.$store.state.model;
 			this.stateBarHeight=this.$store.state.statusBarHeight
-			console.log(this.isModel)
-			console.log(this.$store.state.statusBarHeight)
 			let _this=this;
 			let openId=uni.getStorageSync('openid');
 			let uid=this.uid;
@@ -224,7 +199,6 @@
 				method:'POST',
 				header : {'content-type':'application/x-www-form-urlencoded'},
 				success:function(res){
-					console.log(res)
 					_this.dataList=res.data.data;
 					let arr = res.data.data.recordList;
 					let newarr = []
@@ -257,12 +231,7 @@
 			uni.loadFontFace ({
 			  family: 'Alibaba PuHuiTi',
 			  source: 'url("https://www.mastervan.cn/static/project/dolphin/static/font/alifont/AlibabaPuHuiTi-Light.ttf")',
-			  success: function(){
-					console.log('load font success')
-				  },
-				fail() {
-					//console.log(456)
-				}
+			  success: function(){}
 			})
 		},
 		methods: {
@@ -279,7 +248,6 @@
 				})
 			},
 			tabbarTap:function(e){
-				console.log(e.currentTarget.dataset.index)
 				var s = parseInt(e.currentTarget.dataset.index)
 				this.tabbarIndex = s
 			},
@@ -311,7 +279,6 @@
 			buy:function(e){
 				let openId=uni.getStorageSync('openid');
 				let uid=this.uid;
-				//console.log(uid)
 				let _this=this;
 				
 				uni.showLoading({
@@ -326,7 +293,6 @@
 					method:'POST',
 					header : {'content-type':'application/x-www-form-urlencoded'},
 					success:function(res){
-						console.log(res)
 						let cart=res.data.data;
 						_this.$store.commit('setCart',cart);
 						uni.hideLoading();
@@ -340,7 +306,6 @@
 							icon: 'success',
 							title: '加入成功'
 						})
-						//console.log(_this.$store.state.cart)
 					}
 				})
 				
@@ -348,7 +313,6 @@
 			zan:function(e){
 				let openId=uni.getStorageSync('openid');
 				let _this=this;
-				//console.log(e)
 				uni.request({
 					url:_this.$store.state.baseurl+'/evaluateRecord/likeNum',
 					data:{
@@ -358,7 +322,6 @@
 					method:'POST',
 					header : {'content-type':'application/x-www-form-urlencoded'},
 					success:function(res){
-						// console.log(res.data.data)
 						if(res.data.data){
 							uni.showLoading({
 								title:'点赞成功'
