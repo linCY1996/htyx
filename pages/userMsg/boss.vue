@@ -5,9 +5,8 @@
 			<view class="normal-color" style="height: 110px;overflow: hidden;">
 				<view class="" style="width: 80px;height: 80px;margin: 0 auto;border: 1px solid #9D9D9D;border-radius: 160upx;background-color: white;overflow: hidden">
 					<image style="width: 80px;height: 80px;" :src="avatar" mode="aspectFit"></image>
-				</view>
+				</view> 
 			</view>
-
 			<view class="normal-color" style="margin-left: 10%;margin-right: 10%;">
 				<view class="setFlex title-base">
 					<view style="flex-grow: 1;">公司名称</view>
