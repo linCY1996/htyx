@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class='nav' :class="isModel=='iPhone X'?'paddingTop02':'paddingTop01'" style="background: url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing08.png) no-repeat;background-size: 100% 100%;">
+		<view class='nav' :class="isModel=='iPhone X'?'paddingTop02':'paddingTop01'" style="background: url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing08.png) no-repeat;background-size: 100% 100%;">
 			<view class="title-sty">
 				<view>我的菜们</view>
 			</view>

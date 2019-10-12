@@ -1,9 +1,9 @@
 <template>
 	<view style="font-family: Alibaba PuHuiTi;overflow: hidden;">
-		<video :class="!vSt?'isShow':'isClose'" src="http://47.108.66.16:8088/static/project/dolphin/static/images/bg08.mp4" :style="{'height':isHeight}" style="width: 100%;" autoplay="true"  :controls='false' loop="true" objectFit="cover" @waiting="setImg" @play="closeImg">
+		<video :class="!vSt?'isShow':'isClose'" src="https://www.mastervan.cn/static/project/dolphin/static/images/bg08.mp4" :style="{'height':isHeight}" style="width: 100%;" autoplay="true"  :controls='false' loop="true" objectFit="cover" @waiting="setImg" @play="closeImg">
 			
 		</video>
-		<view :class="!vSt?'isClose':'isShow'" :style="{'height':isHeight}" style="width:100%;position: absolute;top:0;background:url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing11.png) no-repeat;background-size:100% 100%"></view>
+		<view :class="!vSt?'isClose':'isShow'" :style="{'height':isHeight}" style="width:100%;position: absolute;top:0;background:url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing11.png) no-repeat;background-size:100% 100%"></view>
 		<view style="z-index: 9999;position: absolute;top:36px;left: 26px;color: rgba(248,248,255,0.6);font-size: 16px;font-weight: bold;" v-on:tap="goback">
 			返回
 		</view>

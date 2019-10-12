@@ -1,5 +1,5 @@
 <template>
-	<view class="" style="background: url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing01.png) no-repeat;background-size: cover;width: 100%;font-family: Alibaba PuHuiTi;">
+	<view class="" style="background: url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing01.png) no-repeat;background-size: cover;width: 100%;font-family: Alibaba PuHuiTi;">
 		<my-header></my-header>
 		<view style="margin-left: 10px;color: white;font-size: 20px;padding-top: 30px;"></view>
 		<view class="" style="display: flex;padding-top: 36%;height: 190px;">

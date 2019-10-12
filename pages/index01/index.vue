@@ -7,7 +7,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="Tops" style="height: 230px;background: url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing06.png) no-repeat;background-size: cover;color: white;">
+		<view class="Tops" style="height: 230px;background: url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing06.png) no-repeat;background-size: cover;color: white;">
 			<view>
 				<view style="position: absolute;top:100px;left: 50px;display: flex;flex-direction: row;">
 					<view v-on:tap="upHead(userMsg.headPictureUrl)" style="display: inline-block;width: 70px;height: 70px;border-radius: 35px;background: white;overflow: hidden;">
@@ -138,7 +138,7 @@
 			</swiper>
 		</view>
 		<view style="position: fixed;bottom:40px;right:20px">
-			<view style='width:40px;height:40px;background:url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing12.png);background-size:100% 100%'
+			<view style='width:40px;height:40px;background:url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing12.png);background-size:100% 100%'
 			 v-on:tap='callMe'>
 			</view>
 		</view>

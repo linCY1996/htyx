@@ -1,5 +1,5 @@
 <template>
-	<view class="" style="background: url(http://47.108.66.16:8088/static/project/dolphin/static/images/beijing02.png) no-repeat;background-size: cover;height: 700px;width: 100%;padding-top: 2%;font-family: Alibaba PuHuiTi;">
+	<view class="" style="background: url(https://www.mastervan.cn/static/project/dolphin/static/images/beijing02.png) no-repeat;background-size: cover;height: 700px;width: 100%;padding-top: 2%;font-family: Alibaba PuHuiTi;">
 		<view class='nav' :class="isModel=='iPhone X'?'paddingTop02':'paddingTop01'">
 			<view class="title-sty">
 				<view>等待审核</view>
