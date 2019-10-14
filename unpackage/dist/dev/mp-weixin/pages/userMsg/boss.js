@@ -199,24 +199,24 @@ var _default =
   onLoad: function onLoad(option) {
     var _this = this;
     // 判断用户是否注册,已注册用户类型 
-    // let openid = uni.getStorageSync('openid')
-    // _this.$http.changeLogin({
-    // 	openId: openid
-    // }).then(res => {
-    // 	let type = res.data.data;
-    // 	console.log("type", type);
-    // 	if (type == 2) {
-    // 		uni.setStorageSync('userType', 2)
-    // 		uni.reLaunch({
-    // 			url: '../index/index'
-    // 		})
-    // 	} else if (type == 3) {
-    // 		uni.setStorageSync('userType', 3)
-    // 		uni.reLaunch({
-    // 			url: '../index01/index'
-    // 		})
-    // 	}
-    // })
+    var openid = uni.getStorageSync('openid');
+    _this.$http.changeLogin({
+      openId: openid }).
+    then(function (res) {
+      var type = res.data.data;
+      console.log("type", type);
+      if (type == 2) {
+        uni.setStorageSync('userType', 2);
+        uni.reLaunch({
+          url: '../index/index' });
+
+      } else if (type == 3) {
+        uni.setStorageSync('userType', 3);
+        uni.reLaunch({
+          url: '../index01/index' });
+
+      }
+    });
     uni.loadFontFace({
       family: 'Alibaba PuHuiTi',
       source: 'url("https://www.mastervan.cn/static/project/dolphin/static/font/alifont/AlibabaPuHuiTi-Light.ttf")',

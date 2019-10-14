@@ -51,7 +51,6 @@ var httpRequest = {
 		return promise;
 	}
 
-
 }
 
 export default httpRequest

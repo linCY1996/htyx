@@ -1,7 +1,7 @@
 <template>
     <view style="font-family: Alibaba PuHuiTi;">
         <!-- <view v-if="isCanUse"> -->
-			<image class="Top" :style="{width:width+'px'}" src="http://47.108.26.160:8080/pictures/fengmian.png" mode="">
+			<image class="Top" :style="{width:width+'px'}" src="https://www.mastervan.cn/static/project/dolphin/static/images/fengmian.jpg" mode="">
 				<button class='bottom' style="background: rgba(183, 189, 190, 0.4);font-family: Source Han Sans CN;" type='primary' open-type="getUserInfo" @getuserinfo="getUserInfo" withCredentials="true" lang="zh_CN">
 				    授权登录
 				</button>
@@ -17,7 +17,6 @@
                     <view>海豚印象:申请获取以下权限</view>
                     <text>获得你的公开信息(昵称，头像、地区等)</text>
                 </view>
-                
             </view> -->
         <!-- </view> -->
     </view>

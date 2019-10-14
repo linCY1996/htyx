@@ -80,7 +80,7 @@
 					</view>
 					<view class="textParent">
 						<text style="flex-grow: 2;">订单备注:</text>
-						<textarea :fixed="true" class="textAreaShadow" type="text" value="" name='orderRemark' :maxlength="-1" />
+						<textarea class="textAreaShadow" value="" name='orderRemark' />
 					</view>
 				</view>
 				<view>
