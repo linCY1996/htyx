@@ -80,4 +80,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+.chooseTimeText {
+	width: 500rpx;
+}
 

@@ -269,6 +269,17 @@
 				}
 			})
 		},
+		// onShareAppMessage(res) {
+		// 	return {
+		// 		withShareTicket: true,
+		// 		title: '海豚美芽',
+		// 		imageUrl: 'https://miaoyidj-1253818867.cos.ap-chengdu.myqcloud.com/image/499-%E9%A6%96%E5%9B%BE.jpg',
+		// 		path: '/pages/login/main',
+		// 		success: function(res) {
+		// 			console.log("res", res);
+		// 		}
+		// 	}
+		// },
 		methods: {
 			// 视频进入全屏显示
 			findDetailUserMsg(e) {

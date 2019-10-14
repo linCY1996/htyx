@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "mx-date-picker": "/components/mx-datepicker/mx-datepicker"
+    "mx-date-picker": "/components/mx-datepicker/mx-datepicker",
+    "choose-date": "/components/chooseDate"
   },
   "component": true
 }

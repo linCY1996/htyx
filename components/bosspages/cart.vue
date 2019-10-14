@@ -58,24 +58,27 @@
 					</view>
 					<view style="display: flex;flex-direction: row;height: 30px;line-height: 30px;margin-bottom:30px;">
 						<text style="flex-grow: 1;">开始时间:</text>
-						<view style='flex-grow: 7;'>
-							<picker style="color: #CCCCCC;" class="inputShadow" mode="date" :start="getNow" :value="startdate" @change="startChange">
-								<text v-if="startdate==''">选择时间</text>
-								<text v-if="startdate!=''">{{startdate}}</text>
-								<!-- <mx-date-picker :show="showPickerStart" :type="type" :value="value" :show-tips="true" :begin-text="'入住'" :end-text="'离店'" -->
-								<!-- :show-seconds="true" @confirm="onSelected" @cancel="onSelected" /> -->
-							</picker>
+						<view class="chooseTime" style='flex-grow: 7;'>
+								<picker mode="multiSelector" :value="dateTime1" @change="changeDateTime1" @columnchange="changeDateTimeColumn1"
+								 :range="dateTimeArray1">
+								 <view class="tui-picker-detail" v-if="startdate==''">选择时间</view>
+								 <view class="tui-picker-detail" v-if="startdate!=''">{{dateTimeArray1[0][dateTime1[0]]}}-{{dateTimeArray1[1][dateTime1[1]]}}-{{dateTimeArray1[2][dateTime1[2]]}}
+										{{dateTimeArray1[3][dateTime1[3]]}}:{{dateTimeArray1[4][dateTime1[4]]}}</view>
+								</picker>
 						</view>
 					</view>
 					<view style="display: flex;flex-direction: row;height: 30px;line-height: 30px;margin-bottom:30px;">
 						<text style="flex-grow: 1;">结束时间:</text>
-						<view style='flex-grow: 7;'>
-							<picker style="color: #CCCCCC;" class="inputShadow" mode="date" :start="getNow" :value="enddate" @change="endChange">
-								<text v-if="enddate==''">选择时间</text>
-								<text v-if="enddate!=''">{{enddate}}</text>
-								<!-- <mx-date-picker :show="showPickerEnd" :type="type" :value="value" :show-tips="true" :begin-text="'入住'" :end-text="'离店'" -->
-								<!-- :show-seconds="true" @confirm="onSelectedEnd" @cancel="onSelectedEnd" /> -->
-							</picker>
+						<view class="chooseTime" style='flex-grow: 7;'>
+							<!-- :value:startdate -->
+							<!-- <picker style="color: #CCCCCC;" class="inputShadow" mode="date" :start="getNow" :value="enddate"  @change="endChange"> -->
+								<picker mode="multiSelector" :value="dateTimeEnd" @change="changeDateTimeEnd" @columnchange="changeDateTimeColumnEnd"
+								 :range="dateTimeArrayEnd">
+								 <view class="tui-picker-detail" v-if="enddate==''">选择时间</view>
+								 <view class="tui-picker-detail" v-if="enddate!=''">{{dateTimeArrayEnd[0][dateTimeEnd[0]]}}-{{dateTimeArrayEnd[1][dateTimeEnd[1]]}}-{{dateTimeArrayEnd[2][dateTimeEnd[2]]}}
+										{{dateTimeArrayEnd[3][dateTimeEnd[3]]}}:{{dateTimeArrayEnd[4][dateTimeEnd[4]]}}</view>
+								</picker>
+							<!-- </picker> -->
 						</view>
 					</view>
 					<view class="textParent">
@@ -94,9 +97,12 @@
 
 <script>
 	import MxDatePicker from "@/components/mx-datepicker/mx-datepicker.vue";
+	import chooseDate from "@/components/chooseDate.vue"
+	var dateTimePicker = require('../../src/utils/date.js')
 	export default {
 		components: {
-			MxDatePicker
+			MxDatePicker,
+			chooseDate
 		},
 		data() {
 			return {
@@ -106,13 +112,14 @@
 				total: '',
 				allId: '',
 				startdate: '',
-				datetime: '',
 				enddate: '',
 				area: ['选择地址', '', ''],
-				type: 'datetime',
-				showPickerStart: false, //显示选择开始时间组件
-				showPickerEnd: false, //显示选择结束时间组件
-				value: ''
+				dateTimeArray1: null,
+				dateTime1: null,
+				dateTimeArrayEnd: null,
+				dateTimeEnd: null,
+				startYear: 2000,
+				endYear: 2040
 			}
 		},
 		computed: {
@@ -123,7 +130,6 @@
 				let cart = this.$store.state.cart;
 				let _this = this;
 				_this.isLength = Math.ceil(cart.length / 3);
-				//console.log(this.isLength)
 				return cart
 			},
 			isWidth: function() {
@@ -142,21 +148,6 @@
 				}
 				_this.total = s;
 				return s
-			},
-			getNow: function() {
-				var date = new Date();
-				var seperator1 = "-";
-				var year = date.getFullYear();
-				var month = date.getMonth() + 1;
-				var strDate = date.getDate();
-				if (month >= 1 && month <= 9) {
-					month = "0" + month;
-				}
-				if (strDate >= 0 && strDate <= 9) {
-					strDate = "0" + strDate;
-				}
-				var currentdate = year + seperator1 + month + seperator1 + strDate;
-				return currentdate;
 			}
 		},
 		onReady() {
@@ -177,6 +168,18 @@
 					//console.log(_this.$store.state.cart)
 				}
 			})
+		},
+		mounted() {
+			// 获取完整的年月日 时分秒，以及默认显示的数组
+			var obj1 = dateTimePicker.dateTimePicker(this.startYear, this.endYear);
+			// 精确到分的处理，将数组的秒去掉
+			var lastArray = obj1.dateTimeArray.pop();
+			var lastTime = obj1.dateTime.pop();
+			this.dateTimeArray1 = obj1.dateTimeArray
+			this.dateTime1 = obj1.dateTime  //选择开始时间
+			// 选择结束时间
+			this.dateTimeArrayEnd = obj1.dateTimeArray
+			this.dateTimeEnd = obj1.dateTime
 		},
 		methods: {
 			isDelete: function(id, name) {
@@ -218,43 +221,34 @@
 					}
 				});
 			},
-			// // 选择开始时间
-			// onShowDatePickerStart(type) { //显示
-			// 	this.type = type;
-			// 	this.showPickerStar = true;
-			// 	this.value = this[type];
-			// },
-			// // 选择结束时间
-			// onShowDatePickerEnd(type) { //显示
-			// 	this.type = type;
-			// 	this.showPickerEnd = true;
-			// 	this.value = this[type];
-			// },
-			// // 选定开始
-			// onSelected(e) { //选择
-			// 	this.showPickerStart = false;
-			// 	if (e) {
-			// 		this[this.type] = e.value;
-			// 		this.startdate = this[this.type]
-			// 		console.log("dateTime", this.startdate);
-			// 	}
-			// },
-			// 选定结束
-			onSelectedEnd(e) { //选择
-				this.showPickerEnd = false;
-				if (e) {
-					this[this.type] = e.value;
-					this.enddate = this[this.type]
-				}
+			// 选择时间
+			changeDateTime1(e) {
+				this.dateTime1 = e.detail.value
+				this.startdate = this.dateTimeArray1[0][this.dateTime1[0]]+'-'+this.dateTimeArray1[1][this.dateTime1[1]]+'-'+this.dateTimeArray1[2][this.dateTime1[2]]+' '+this.dateTimeArray1[3][this.dateTime1[3]]+':'+this.dateTimeArray1[4][this.dateTime1[4]]
 			},
-			startChange: function(e) {
-				this.startdate = e.target.value
+			changeDateTimeColumn1(e) {
+				var arr = this.dateTime1
+				var dateArr = this.dateTimeArray1;
+				arr[e.detail.column] = e.detail.value;
+				dateArr[2] = dateTimePicker.getMonthDay(dateArr[0][arr[0]], dateArr[1][arr[1]]);
+				this.dateTimeArray1 = dateArr
+				this.dateTime1 = arr
+			},
+			// 选择结束时间
+			changeDateTimeEnd(e) {
+				this.dateTimeEnd = e.detail.value
+				this.enddate = this.dateTimeArrayEnd[0][this.dateTimeEnd[0]]+'-'+this.dateTimeArrayEnd[1][this.dateTimeEnd[1]]+'-'+this.dateTimeArrayEnd[2][this.dateTimeEnd[2]]+' '+this.dateTimeArrayEnd[3][this.dateTimeEnd[3]]+':'+this.dateTimeArrayEnd[4][this.dateTimeEnd[4]]
+			},
+			changeDateTimeColumnEnd(e) {
+				var arr = this.dateTimeEnd
+				var dateArr = this.dateTimeArrayEnd;
+				arr[e.detail.column] = e.detail.value;
+				dateArr[2] = dateTimePicker.getMonthDay(dateArr[0][arr[0]], dateArr[1][arr[1]]);
+				this.dateTimeArrayEnd = dateArr
+				this.dateTimeEnd = arr
 			},
 			chooseArea: function(e) {
 				this.area = e.detail.value
-			},
-			endChange: function(e) {
-				this.enddate = e.target.value
 			},
 			submitOrder: function(e) {
 				let cart = this.$store.state.cart;
@@ -420,5 +414,9 @@
 		text-overflow: clip;
 		overflow: hidden;
 		white-space: nowrap;
+	}
+	.chooseTimeText {
+		width: 500rpx;
+		
 	}
 </style>
